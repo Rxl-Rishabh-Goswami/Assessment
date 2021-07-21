@@ -1,0 +1,36 @@
+body{
+  background-color: blue;
+}
+.boxy{
+  border-style: solid;
+  
+  border-radius: 10px;
+  margin-bottom: 10px;
+  
+  padding: 5px;
+}
+.boxy1{
+  background-color: #eee;
+  border-radius: 10px;
+  font-size: large;
+  font-weight: bold;
+  width: 100%;
+  text-align: left;
+  padding: 0px 20px;
+  padd
+}
+.boxy2{
+  padding: 10px;
+}
+.dp {
+  float: left;
+  padding: 5px;
+  width: 100px;
+}
+.un{
+  color: gray;
+}
+.heading {
+font-family: "Goudy Bookletter 1911", sans-serif;
+font-size: xx-large;
+}
