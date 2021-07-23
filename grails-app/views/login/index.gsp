@@ -42,9 +42,9 @@
   						</div>
   						<div>
   							<span style="float: left;">
-  								<a href="#" class="fa fa-facebook"></a>
-								<a href="#" class="fa fa-twitter"></a>
-								<a href="#" class="fa fa-google"></a>
+  								<a href="#" class="fa fa-facebook fa-2x"></a>
+								<a href="#" class="fa fa-twitter fa-2x"></a>
+								<a href="#" class="fa fa-google fa-2x"></a>
   							</span>
   							<span style="float: right;">
   								<a href="www.google.com">View Post</a>
@@ -64,9 +64,9 @@
   						</div>
   						<div>
   							<span style="float: left;">
-  								<a href="#" class="fa fa-facebook"></a>
-								<a href="#" class="fa fa-twitter"></a>
-								<a href="#" class="fa fa-google"></a>
+  								<a href="#" class="fa fa-facebook fa-2x"></a>
+								<a href="#" class="fa fa-twitter fa-2x"></a>
+								<a href="#" class="fa fa-google fa-2x"></a>
   							</span>
   							<span style="float: right;">
   								<a href="www.google.com">View Post</a>
@@ -118,9 +118,9 @@
   						</div>
   						<div>
   							<span style="float: left;">
-  								<a href="#" class="fa fa-facebook"></a>
-								<a href="#" class="fa fa-twitter"></a>
-								<a href="#" class="fa fa-google"></a>
+  								<a href="#" class="fa fa-facebook fa-2x"></a>
+								<a href="#" class="fa fa-twitter fa-2x"></a>
+								<a href="#" class="fa fa-google fa-2x"></a>
   							</span>
   							<span style="float: right;">
   								<a href="www.google.com">View Post</a>
