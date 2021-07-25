@@ -3,6 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<title>Link Sharing</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<g:if env="development"><asset:stylesheet src="index.css"/></g:if>
 
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
@@ -13,7 +14,6 @@
 	
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-
 </head>
 <body>
 	<nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -25,32 +25,32 @@
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item active">
-        <a class="nav-link" href="#"><i class="fa fa-envelope fa-2x"></i></a>
+        <a class="nav-link" data-toggle="modal" data-target="#sendInvite"><i class="fa fa-envelope fa-2x"></i></a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#"><i class="fa fa-lightbulb-o fa-2x"></i>
+        <a class="nav-link" data-toggle="modal" data-target="#createTopic"><i class="fa fa-lightbulb-o fa-2x"></i>
 		</a>
       </li>
       <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <i class="fa fa-user fa-2x"></i>&nbsp;<span>Uday</span>
+        <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <i class="fa fa-user fa-2x"></i>&nbsp;<span>${user.firstName}</span>
 
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="#">Profile</a>
-          <a class="dropdown-item" href="#">Users</a>
-          <a class="dropdown-item" href="#">Topics</a>
-          <a class="dropdown-item" href="#">Posts</a>
+          <g:link class="dropdown-item" controller="user" action="index">Profile</g:link>
+          <g:link class="dropdown-item" controller="user" action="index">Users</g:link>
+          <g:link class="dropdown-item" controller="topic" action="index">Topics</g:link>
+          <g:link class="dropdown-item" controller="resources" action="index">Posts</g:link>
           <div class="dropdown-divider"></div>
-			<g:link class="dropdown-item" action="index">Log Out</g:link>
+			<g:link class="dropdown-item" controller="login" action="logout">Log Out</g:link>
         </div>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#"><i class="fa fa-file-text fa-2x"></i>
+        <a class="nav-link" data-toggle="modal" data-target="#shareDocument"><i class="fa fa-file-text fa-2x"></i>
 		</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#"><i class="fa fa-link fa-2x"></i>
+        <a class="nav-link" data-toggle="modal" data-target="#shareLink"><i class="fa fa-link fa-2x"></i>
 		</a>
       </li>
     </ul>
@@ -66,10 +66,10 @@
 				<div class="boxy1">User Profile</div>
 				<div class="boxy2">
 					<div>
-  						<img src="https://bootdey.com/img/Content/avatar/avatar6.png" class="img-circle img-thumbnail dp" alt="Profile Picture">
+  						<g:link action="index" controller="user"><img src="https://bootdey.com/img/Content/avatar/avatar6.png" class="img-circle img-thumbnail dp" alt="Profile Picture"></g:link>
   						<div style="font-size:15px;">
-  							<span style="font-weight: bolder;">Uday Pratap Singh</span><br>
-  							<span class="un">@uday</span><br>
+  							<span style="font-weight: bolder;">${user.firstName + " " + user.lastName}</span><br>
+  							<span class="un">@${user.username}</span><br>
   							<span class="un">Subscriptions&nbsp;&nbsp;&nbsp;Topics</span><br>
   							<span>50</span>&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
   							<span>20</span>
@@ -89,7 +89,7 @@
   						<div>
   							<span style="font-weight:bolder; font-size: 15px;">Uday Pratap Singh</span>
   							<span class="un">@uday 5min</span>
-  							<span style="float: right;"><a href="www.google.com">Grails</a></span>
+  							<span style="float: right;"><a href="#">Grails</a></span>
   						</div>
   						<div>
   							<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud</p>
@@ -152,14 +152,14 @@
   							<span>50</span>&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
   							<span>20</span>
   							<div>
-  								<select id="Privacy" name="Privacy">
-  									<option value="volvo">Private</option>
-  									<option value="saab">Public</option>
+  								<select  name="Privacy">
+  									<option value="Private">Private</option>
+  									<option value="Public">Public</option>
 								</select>
-								<select id="Seriousness" name="Seriousness">
-	  								<option value="volvo">Serious</option>
-	  								<option value="saab">Very Serious</option>
-	  								<option value="saab">Critical</option>
+								<select name="Seriousness">
+	  								<option value="Serious">Serious</option>
+	  								<option value="Very_Serious">Very Serious</option>
+	  								<option value="Casual">Casual</option>
 								</select>
 								<a href="#" class="fa fa-envelope"></a>
 								<a href="#" class="fa fa-file-text"></a>
@@ -178,10 +178,10 @@
   							<span>50</span>&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
   							<span>20</span>
   							<div>
-								<select id="Seriousness" name="Seriousness">
-	  								<option value="volvo">Serious</option>
-	  								<option value="saab">Very Serious</option>
-	  								<option value="saab">Critical</option>
+								<select name="Seriousness">
+									<option value="Serious">Serious</option>
+									<option value="Very_Serious">Very Serious</option>
+									<option value="Casual">Casual</option>
 								</select>
 								<a href="#" class="fa fa-envelope"></a>
   							</div>
@@ -240,5 +240,129 @@
 			</div>
 		</div>
 		</div>
+
+
+
+
+
+
+<div class="modal fade" id="shareLink" tabindex="-1" role="dialog" aria-labelledby="shareLink" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header boxy1">
+				<h5 class="modal-title" style="font-weight: bolder">Share Link</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<g:form>
+					<label>Link</label><br>
+					<g:textField name="link"></g:textField><br>
+					<label>Description</label><br>
+					<g:textArea name="linkDescription"></g:textArea><br>
+					<label>Topic</label><br>
+					<g:textField name="linkTopic"></g:textField><br>
+				</g:form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-primary">Save changes</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<div class="modal fade" id="createTopic" tabindex="-1" role="dialog" aria-labelledby="createTopic" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header boxy1">
+				<h5 class="modal-title" style="font-weight: bolder">Create Topic</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<g:form>
+					<label>Name</label><br>
+					<g:textField name="name"></g:textField><br>
+
+					<label>Visbility</label><br>
+					<select name="topicVisibility">
+						<option>Public</option>
+						<option>Private</option>
+					</select>
+				</g:form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-primary">Save changes</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<div class="modal fade" id="shareDocument" tabindex="-1" role="dialog" aria-labelledby="shareDocument" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header boxy1">
+				<h5 class="modal-title" style="font-weight: bolder">Share Document</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<g:form>
+					<label>Document</label><br>
+					<g:textField name="document"></g:textField><br>
+					<label>Description</label><br>
+					<g:textArea name="documentDescription"></g:textArea><br>
+					<label>Topic</label><br>
+					<g:textField name="documentTopic"></g:textField><br>
+				</g:form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-primary">Save changes</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<div class="modal fade" id="sendInvite" tabindex="-1" role="dialog" aria-labelledby="sendInvite" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header boxy1">
+				<h5 class="modal-title" style="font-weight: bolder">Send Invite</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<g:form>
+					<label>Email</label><br>
+					<g:textField name="emailInvite"></g:textField><br>
+					<label>Topic</label><br>
+					<select name="emailTopic">
+						<option>Topic</option>
+					</select>
+				</g:form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-primary">Save changes</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+
+
+
 </body>
 </html>

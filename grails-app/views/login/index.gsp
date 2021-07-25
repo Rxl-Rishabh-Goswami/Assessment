@@ -19,7 +19,7 @@
 </head>
 <body>
 	<nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand heading" href="#" style="font-size:30px;"><b>Link Sharing</b></a>
+		<g:link class="navbar-brand heading" style="font-size:30px;" controller="login" action="index"><b>Link Sharing</b></g:link>
     <form class="form-inline my-2 my-lg-0">
       <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
       <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
@@ -81,14 +81,14 @@
 				<div class="boxy2">
 					<g:form controller="Login" action="loginuser" method="POST" >
 						<label>Username :</label>
-						<g:textField name="username" placeholder="Enter Username"/>
+						<g:textField name="username" placeholder="Enter Username/Email"/>
 						<br>
 						<label>Password :</label>
 						<g:passwordField name="password" placeholder="Enter Password"/>
 						<br>
-						<a href="www.google.com">Forget Password?</a>
 						<g:submitButton value='Submit' name="submit"/>
 					</g:form>
+					<g:link controller="login" action="forgetPassword">Forget Password?</g:link>
 				</div>
 			</div>
 		</div>

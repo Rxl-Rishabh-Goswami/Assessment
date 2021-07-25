@@ -5,8 +5,12 @@ class LoginController {
     def index() { }
     def loginuser() {
         User user = User.findWhere(username: params['username'], password: params['password'])
+        if(!user){
+            user = User.findWhere(email: params['username'], password: params['password'])
+        }
         if (user) {
-            render(view: 'dashboard')
+            session.username = user.username
+            render(view: 'dashboard', model: [user:user])
         }
         else{
             redirect(action:'index')
@@ -27,6 +31,32 @@ class LoginController {
         }
     }
     def forgetPassword(){
+        render(view: 'forgetpassword')
+        User user = User.findWhere(username: params['username'],email: params['email'])
+        if(user){
+            render(view: 'changepassword')
+        }
+        else{
+            render("User Not Found")
+        }
 
     }
+    def changePassword(){
+        if(params['newpassword']==params['confirmpassword']){
+            render{"heyy"}
+        }
+        else{
+            render("Bye")
+        }
+
+    }
+    def logout(){
+        session.invalidate()
+        render(view: 'index')
+    }
+
 }
+
+
+
+
