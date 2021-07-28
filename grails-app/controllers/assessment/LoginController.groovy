@@ -10,7 +10,7 @@ class LoginController {
         }
         if (user) {
             session.username = user.username
-            render(view: 'dashboard', model: [user:user])
+            redirect(action: 'dashboard') //, model: [user:user])
         }
         else{
             redirect(action:'index')
@@ -32,27 +32,38 @@ class LoginController {
     }
     def forgetPassword(){
         render(view: 'forgetpassword')
-        User user = User.findWhere(username: params['username'],email: params['email'])
-        if(user){
-            render(view: 'changepassword')
-        }
-        else{
-            render("User Not Found")
-        }
 
     }
     def changePassword(){
-        if(params['newpassword']==params['confirmpassword']){
-            render{"heyy"}
+        User user = User.findWhere(username: params['username'],email: params['email'])
+        if(!user){
+            flash.messsage = "User Not Found"
+            redirect(action: 'forgetPassword')
+        }
+        render(view: 'changepassword',model: [userEmail:user.email])
+
+
+    }
+    def updatePassword(){
+        if(params.newpassword==params.confirmpassword){
+            User user = User.findByEmail(params.email)
+            user.password = params.newpassword
+            user.save(flush:true)
+            render(view: 'index')
         }
         else{
-            render("Bye")
+            render(view: 'changepassword')
         }
+
 
     }
     def logout(){
         session.invalidate()
-        render(view: 'index')
+        redirect(action: 'index')
+    }
+    def dashboard(){
+        User user = User.findWhere(username: session.username)
+        render(view: 'dashboard', model:[user:user])
     }
 
 }

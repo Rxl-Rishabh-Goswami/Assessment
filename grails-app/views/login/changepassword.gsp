@@ -27,11 +27,12 @@
 <div class="container" style="padding: 100px">
     <div class="boxy1" style="text-align: center">Reset Password</div>
     <div class="boxy2" style="text-align: center" style="font-size: larger">
-        <g:form controller="login" action="changePassword">
+        <g:form controller="login" action="updatePassword">
             <label>New Password :</label>
             <g:passwordField name="newpassword"></g:passwordField><br>
             <label>Confirm Password :</label>
             <g:passwordField name="confirmpassword"></g:passwordField><br>
+            <g:hiddenField name="email" value="${userEmail}"></g:hiddenField>
             <g:submitButton value="Submit" name="submit" class="btn btn-outline-success my-2 my-sm-0" ></g:submitButton>
         </g:form>
     </div>

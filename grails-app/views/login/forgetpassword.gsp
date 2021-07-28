@@ -24,10 +24,11 @@
             <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
         </form>
     </nav>
+<h3>${flash.message}</h3>
     <div class="container" style="padding: 100px">
         <div class="boxy1" style="text-align: center">Reset Password</div>
         <div class="boxy2" style="text-align: center" style="font-size: larger">
-            <g:form controller="login" action="forgetPassword">
+            <g:form controller="login" action="changePassword">
                 <label>Username :</label>
                 <g:textField name="username"></g:textField><br>
                 <label>Email :</label>

@@ -3,6 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<title>Link Sharing</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<g:if env="development"><asset:stylesheet src="index.css"/></g:if>
 
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
@@ -10,55 +11,12 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-	
+
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-	<a class="navbar-brand heading" href="#" style="font-size:30px;"><b>Link Sharing</b></a>
-	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-		<span class="navbar-toggler-icon"></span>
-	</button>
-
-	<div class="collapse navbar-collapse" id="navbarSupportedContent">
-		<ul class="navbar-nav mr-auto">
-			<li class="nav-item active">
-				<a class="nav-link" href="#"><i class="fa fa-envelope fa-2x"></i></a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link" href="#"><i class="fa fa-lightbulb-o fa-2x"></i>
-				</a>
-			</li>
-			<li class="nav-item dropdown">
-				<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-					<i class="fa fa-user fa-2x"></i>&nbsp;<span>${user.firstName}</span>
-
-				</a>
-				<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-					<g:link class="dropdown-item" controller="user" action="index">Profile</g:link>
-					<g:link class="dropdown-item" controller="user" action="index">Users</g:link>
-					<g:link class="dropdown-item" controller="topic" action="index">Topics</g:link>
-					<g:link class="dropdown-item" controller="resources" action="index">Posts</g:link>
-					<div class="dropdown-divider"></div>
-					<g:link class="dropdown-item" controller="login" action="logout">Log Out</g:link>
-				</div>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link" href="#"><i class="fa fa-file-text fa-2x"></i>
-				</a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link" href="#"><i class="fa fa-link fa-2x"></i>
-				</a>
-			</li>
-		</ul>
-		<form class="form-inline my-2 my-lg-0">
-			<input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-			<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-		</form>
-	</div>
-</nav>
+<g:render template="/template/navbar"/>
 	<div class="container">
 	<div class="row">
 		<div class="boxy col-lg-5">
@@ -162,5 +120,19 @@
 			</div>
 	</div>
 	</div>
+
+
+
+
+<g:render template="/template/createTopic"/>
+
+
+<g:render template="/template/shareDocument"/>
+
+
+<g:render template="/template/sendInvite"/>
+
+
+<g:render template="/template/shareLink"/>
 </body>
 </html>

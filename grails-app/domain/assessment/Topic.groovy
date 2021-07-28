@@ -9,5 +9,7 @@ class Topic {
     static hasMany = [resources:Resource,subscriptions:Subscription]
     static belongsTo = [user:User]
     static constraints = {
+        name unique:true,nullable: false,blank: false
+        visibility(nullable: true)
     }
 }
