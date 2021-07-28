@@ -19,7 +19,20 @@ class LoginController {
     }
     def register(){
         if(params['password'] == params['confirm']) {
-            User user = new User(email: params['email'], username: params['username'], firstName: params['firstName'], lastName: params['lastName'], password: params['password'], active: true, admin: false, photo: [1, 2, 3, 4])
+
+
+
+            User user = new User(email: params['email'], username: params['username'], firstName: params['firstName'], lastName: params['lastName'], password: params['password'], active: true, admin: false)
+            def profilePhoto = request.getFile("profilePhoto")
+            String origin = profilePhoto.getOriginalFilename()
+            if (origin) {
+                File file = new File("/home/rxlogix/IdeaProjects/Assessment/grails-app/assets/images/profilePicture/${params.username}.jpg")
+                profilePhoto.transferTo(file)
+                user.photo ="/profilePicture/${params.username}.jpg"
+            }
+            if(params.profilePhoto==null){
+                user.photo="https://bootdey.com/img/Content/avatar/avatar6.png"
+            }
             user.save(flush:true,failOnError:true)
             redirect(action: 'index')
 

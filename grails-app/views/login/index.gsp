@@ -133,7 +133,7 @@
 			<div class="boxy col-lg-5">
 				<div class="boxy1">Register</div>
 				<div class="boxy2">
-					<g:form controller="Login" action="register" method="POST">
+					<g:uploadForm controller="Login" action="register" method="POST" >
 						<label>First Name</label>
 						<g:textField name="firstName" placeholder="Enter First Name"/><br>
 						<label>Last Name</label>
@@ -146,9 +146,11 @@
 						<g:passwordField name="password" placeholder="Enter Password"/><br>
 						<label>Confirm Password</label>
 						<g:passwordField name="confirm" placeholder="Enter Password Again"/><br>
+						<label>Profile Photo </label>
+						<input type="file" name="profilePhoto"><br>
 
 						<g:submitButton name="submit" value="Submit"/>
-					</g:form>
+					</g:uploadForm>
 				</div>
 			</div>
 		</div>

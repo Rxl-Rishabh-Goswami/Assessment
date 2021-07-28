@@ -23,7 +23,7 @@
 
 				<div class="boxy2">
 					<div>
-  						<g:link action="index" controller="user"><img src="https://bootdey.com/img/Content/avatar/avatar6.png" class="img-circle img-thumbnail dp" alt="Profile Picture"></g:link>
+						<g:link action="index" controller="user"><asset:image src="${user.photo}" class="img-circle img-thumbnail dp" alt="Profile Picture"/></g:link>
   						<div style="font-size:15px;">
   							<span style="font-weight: bolder;">${user.firstName + " " + user.lastName}</span><br>
   							<span class="un">@${user.username}</span><br>

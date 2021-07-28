@@ -6,7 +6,7 @@ class User {
     String password
     String firstName
     String lastName
-    byte[] photo
+    String photo
     Boolean admin
     Boolean active
     Date dateCreated
