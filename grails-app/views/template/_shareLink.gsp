@@ -3,7 +3,7 @@
     <title></title>
 </head>
 <body>
-<div class="modal fade" id="shareLink" tabindex="-1" role="dialog" aria-labelledby="shareLink" aria-hidden="true">
+<div class="modal" id="shareLink" tabindex="-1" role="dialog" aria-labelledby="shareLink" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header boxy1">
@@ -13,19 +13,27 @@
                 </button>
             </div>
             <div class="modal-body">
-                <g:form>
+                <g:form controller="resources" action="createLink">
+                    <div class="form-group">
                     <label>Link</label><br>
-                    <g:textField name="link"></g:textField><br>
+                    <g:textField class="form-control" name="link"/><br>
+                    </div>
+                    <div class="form-group">
                     <label>Description</label><br>
-                    <g:textArea name="linkDescription"></g:textArea><br>
+                    <g:textArea class="form-control" name="linkDescription"></g:textArea>
+                    </div>
+                    <div class="form-group">
                     <label>Topic</label><br>
-                    <g:textField name="linkTopic"></g:textField><br>
+                    <g:select class="form-control" name="topicLink" from="${assessment.Topic.getAll().name}"/>
+                    </div>
+                    <div class="modal-footer">
+                        <g:submitButton name="submit" class="btn btn-primary" value="Submit"/>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+
                 </g:form>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
-            </div>
+
         </div>
     </div>
 </div>

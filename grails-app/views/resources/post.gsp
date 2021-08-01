@@ -24,20 +24,32 @@
 					<div>
   						<img src="https://bootdey.com/img/Content/avatar/avatar6.png" class="img-circle img-thumbnail dp" alt="Profile Picture">
   						<div>
-  							<span style="font-weight:bolder; font-size: 15px;">Uday Pratap Singh</span>
-  							<span class="un">@uday 5min</span>
-  							<span style="float: right;"><a href="www.google.com">Grails</a></span>
+  							<span style="font-weight:bolder; font-size: 15px;">${resource.user.firstName} ${resource.user.lastName}</span>
+  							<span class="un">@${resource.user.username} 5min</span>
+  							<span style="float: right;"><a href="www.google.com">${resource.topic.name}</a></span>
   						</div>
   						
-  							<span>Time&Date</span>
+  							<span>${resource.dateCreated}</span>
   							<div class="container justify-content-center">
 							    <div class="stars">
-							        <form action=""> <input class="star star-5" id="star-5" type="radio" name="star" /> <label class="star star-5" for="star-5"></label> <input class="star star-4" id="star-4" type="radio" name="star" /> <label class="star star-4" for="star-4"></label> <input class="star star-3" id="star-3" type="radio" name="star" /> <label class="star star-3" for="star-3"></label> <input class="star star-2" id="star-2" type="radio" name="star" /> <label class="star star-2" for="star-2"></label> <input class="star star-1" id="star-1" type="radio" name="star" /> <label class="star star-1" for="star-1"></label> </form>
+							        <g:form controller="resourceRating" action="rating" params="[resourceID:resource.id]" >
+										<input class="star star-5" id="star-5" type="radio" name="r" value="5"/>
+										<label class="star star-5" for="star-5"></label>
+										<input class="star star-4" id="star-4" type="radio" name="r" value="4"/>
+										<label class="star star-4" for="star-4"></label>
+										<input class="star star-3" id="star-3" type="radio" name="r" value="3"/>
+										<label class="star star-3" for="star-3"></label>
+										<input class="star star-2" id="star-2" type="radio" name="r" value="2"/>
+										<label class="star star-2" for="star-2"></label>
+										<input class="star star-1" id="star-1" type="radio" name="r" value="1"/>
+										<label class="star star-1" for="star-1"></label><br>
+										<g:submitButton name="submit" value="Submit"></g:submitButton>
+									</g:form>
 							    </div>
 							</div>
   						
   						<div>
-  							<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud</p>
+  							<p>${resource.description}</p>
   						</div>
   						<div>
   							<span style="float: left;">
@@ -60,15 +72,16 @@
 				<div class="boxy1">Trending Topics
 				</div>
 				<div class="boxy2">
+					<g:each in="${topic}">
 					<div>
   						<img src="https://bootdey.com/img/Content/avatar/avatar6.png" class="img-circle img-thumbnail dp" alt="Profile Picture">
   						<div style="font-size:15px;">
-  							<span>Uday Pratap Singh</span>
+  							<span>${it.name}</span>
   							<br>
-  							<span class="un">@uday</span><br>
+  							<span class="un">@${it.user.username}</span><br>
   							<span class="un">Subscriptions&nbsp;&nbsp;&nbsp;Post</span><br>
-  							<span>50</span>&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
-  							<span>20</span>
+  							<span>${assessment.Subscription.countByTopic(it)}</span>&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  							<span>${assessment.Resource.countByTopic(it)}</span>
   							<div>
   								<select id="Privacy" name="Privacy">
   									<option value="volvo">Private</option>
@@ -86,6 +99,7 @@
   						</div>
 
 					</div><br><hr>
+					</g:each>
 					<div>
   						<img src="https://bootdey.com/img/Content/avatar/avatar6.png" class="img-circle img-thumbnail dp" alt="Profile Picture">
   						<div style="font-size:15px;">
@@ -102,5 +116,17 @@
 			</div>
 	</div>
 	</div>
+
+
+<g:render template="/template/createTopic"/>
+
+
+<g:render template="/template/shareDocument"/>
+
+
+<g:render template="/template/sendInvite"/>
+
+
+<g:render template="/template/shareLink"/>
 </body>
 </html>

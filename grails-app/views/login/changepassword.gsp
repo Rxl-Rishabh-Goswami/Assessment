@@ -32,7 +32,7 @@
             <g:passwordField name="newpassword"></g:passwordField><br>
             <label>Confirm Password :</label>
             <g:passwordField name="confirmpassword"></g:passwordField><br>
-            <g:hiddenField name="email" value="${userEmail}"></g:hiddenField>
+            <g:hiddenField name="email" value="${user.email}"></g:hiddenField>
             <g:submitButton value="Submit" name="submit" class="btn btn-outline-success my-2 my-sm-0" ></g:submitButton>
         </g:form>
     </div>
