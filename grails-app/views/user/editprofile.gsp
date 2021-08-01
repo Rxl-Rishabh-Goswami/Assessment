@@ -17,13 +17,29 @@
 </head>
 <body>
 <g:render template="/template/navbar"/>
-	<div class="container">User user = User.findWhere(username:session.username)
+
+<g:if test="${flash.userUpdated}">
+	<div class="alert alert-success" role="alert">${flash.userUpdated}</div>
+</g:if>
+<g:if test="${flash.passwordUpdated}">
+	<div class="alert alert-success" role="alert">${flash.passwordUpdated}</div>
+</g:if>
+
+<g:if test="${flash.userNotUpdated}">
+	<div class="alert alert-danger" role="alert">${flash.userNotUpdated}</div>
+</g:if>
+<g:if test="${flash.passwordNotUpdated}">
+	<div class="alert alert-danger" role="alert">${flash.passwordNotUpdated}</div>
+</g:if>
+
+
+	<div class="container">
 		<div class="row">
 			<div class="boxy col-lg-5">
 				<div class="boxy1">User Profile</div>
 				<div class="boxy2">
 					<div>
-  						<img src="https://bootdey.com/img/Content/avatar/avatar6.png" class="img-circle img-thumbnail dp" alt="Profile Picture">
+						<asset:image src="${user.photo}" class="img-circle img-thumbnail dp" alt="Profile Picture"/>
   						<div style="font-size:15px;">
   							<span style="font-weight: bolder;">${user.firstName} ${user.lastName}</span><br>
   							<span class="un">@${user.username}</span><br>
@@ -40,20 +56,34 @@
 			</div>
 			<div class="boxy col-lg-7">
 				<div class="boxy1">Update Profile</div>
-				<g:form controller="user" action="editProfile">
-						<label>FirstUser user = User.findWhere(username:session.username) Name</label>
-						<g:textField name="firstName" placeholder="Enter First Name"/><br>
+				<g:uploadForm controller="user" action="editProfile">
+						<div class="form-group">
+						<label>First Name</label>
+						<g:textField class="form-control" name="firstName" placeholder="Enter First Name"/>
+						</div>
+						<div class="form-group">
 						<label>Last Name</label>
-						<g:textField name="lastName" placeholder="Enter Last Name"/><br>
+						<g:textField class="form-control" name="lastName" placeholder="Enter Last Name"/>
+						</div>
+						<div class="form-group">
 						<label>User Name</label>
-						<g:textField name="username" placeholder="Enter User Name"/><br>
+						<g:textField class="form-control" name="username" placeholder="Enter User Name"/>
+						</div>
+						<div class="form-group">
 						<label>Password</label>
-						<g:passwordField name="password" placeholder="Enter Password"/><br>
+						<g:passwordField class="form-control" name="password" placeholder="Enter Password"/>
+						</div>
+						<div class="form-group">
 						<label>Confirm Password</label>
-						<g:passwordField name="confirm" placeholder="Enter Password Again"/><br>
+						<g:passwordField class="form-control" name="confirm" placeholder="Enter Password Again"/>
+						</div>
+						<div class="form-group">
+						<label>Profile Picture</label><br>
+						<input type="file" class="form-group" name="profilePhoto">
+						</div>
 
 						<g:submitButton name="Submit" value="Submit" class="btn btn-outline-success my-2 my-sm-0"></g:submitButton>
-					</g:form>
+					</g:uploadForm>
 			</div>
 		</div>
 			<div class="row">
@@ -65,16 +95,17 @@
 					</span>
 				</div>
 				<div class="boxy2">
+					<g:each in="${user.topics}">
 					<div>
-  						<img src="https://bootdey.com/img/Content/avatar/avatar6.png" class="img-circle img-thumbnail dp" alt="Profile Picture">
+						<asset:image src="${user.photo}" class="img-circle img-thumbnail dp" alt="Profile Picture"/>
   						<div style="font-size:15px;">
-  							<input type="text" name="topicname" value="Grails">
+  							<input type="text" name="topicname" value="${it.name}">
   							<button class="btn btn-outline-success my-2 my-sm-0">Save</button>
   							<br>
-  							<span class="un">@uday</span><br>
+  							<span class="un">@${user.username}</span><br>
   							<span class="un">Subscriptions&nbsp;&nbsp;&nbsp;Post</span><br>
-  							<span>50</span>&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
-  							<span>20</span>
+  							<span>${assessment.Subscription.countByTopic(it)}</span>&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  							<span>${assessment.Resource.countByTopic(it)}</span>
   							<div>
   								<select id="Privacy" name="Privacy">
   									<option value="volvo">Private</option>
@@ -92,16 +123,21 @@
 
   						</div>
 
-					</div>
+					</div><br><br><br><br><hr>
+					</g:each>
 				</div>
 			</div>
 				<div class="boxy col-lg-7">
 				<div class="boxy1">Change Password</div>
 					<g:form controller="user" action="updatePassword">
+						<div class="form-group">
 						<label>New Password :</label>
-						<g:passwordField name="newpassword"></g:passwordField><br>
+						<g:passwordField class="form-control" name="newpassword"></g:passwordField>
+						</div>
+						<div class="form-group">
 						<label>Confirm Password :</label>
-						<g:passwordField name="confirmpassword"></g:passwordField><br>
+						<g:passwordField class="form-control" name="confirmpassword"></g:passwordField>
+						</div>
 						<g:submitButton value="Submit" name="submit" class="btn btn-outline-success my-2 my-sm-0" ></g:submitButton>
 					</g:form>
 			</div>

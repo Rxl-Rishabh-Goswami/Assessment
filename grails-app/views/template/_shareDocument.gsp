@@ -3,7 +3,7 @@
     <title></title>
 </head>
 <body>
-<div class="modal fade" id="shareDocument" tabindex="-1" role="dialog" aria-labelledby="shareDocument" aria-hidden="true">
+<div class="modal" id="shareDocument" tabindex="-1" role="dialog" aria-labelledby="shareDocument" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header boxy1">
@@ -13,18 +13,24 @@
                 </button>
             </div>
             <div class="modal-body">
-                <g:form>
-                    <label>Document</label><br>
-                    <g:textField name="document"></g:textField><br>
-                    <label>Description</label><br>
-                    <g:textArea name="documentDescription"></g:textArea><br>
-                    <label>Topic</label><br>
-                    <g:textField name="documentTopic"></g:textField><br>
-                </g:form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
+                <g:uploadForm controller="resources" action="createDocument">
+                    <div class="form-group">
+                    <label>Document</label>
+                    <input class="form-group" type="file" name="document">
+                    </div>
+                    <div class="form-group">
+                    <label>Description</label>
+                    <g:textArea class="form-control" name="documentDescription"></g:textArea>
+                    </div>
+                    <div class="form-group">
+                    <label>Topic</label>
+                    <g:select class="form-control" name="topicDocument" from="${assessment.Topic.getAll().name}"/>
+                    </div>
+                    <div class="modal-footer">
+                        <g:submitButton name="submit" class="btn btn-primary" value="Submit"/>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </g:uploadForm>
             </div>
         </div>
     </div>

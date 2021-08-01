@@ -20,7 +20,7 @@
 			<div class="boxy col-lg-5">
 				<div class="boxy2">
 					<div>
-  						<img src="https://bootdey.com/img/Content/avatar/avatar6.png" class="img-circle img-thumbnail dp" alt="Profile Picture">
+						<asset:image src="${user.photo}" class="img-circle img-thumbnail dp" alt="Profile Picture"/>
   						<div style="font-size:15px;">
   							<span style="font-weight: bolder;">${user.firstName} ${user.lastName}</span><br>
   							<span class="un">@${user.username}</span><br>
@@ -40,14 +40,15 @@
 					</span>
 				</div>
 				<div class="boxy2">
+					<g:each in="${user.resources}">
 					<div>
-  						<div>
-  							<span style="font-weight:bolder; font-size: 15px;">Uday Pratap Singh</span>
-  							<span class="un">@uday 5min</span>
-  							<span style="float: right;"><a href="www.google.com">Grails</a></span>
+						<div>
+  							<span style="font-weight:bolder; font-size: 15px;">${user.firstName} ${user.lastName}</span>
+  							<span class="un">@${user.username} 5min</span>
+  							<span style="float: right;"><a href="www.google.com">${it.topic.name}</a></span>
   						</div>
   						<div>
-  							<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud</p>
+  							<p>${it.description}</p>
   						</div>
   						<div>
   							<span style="float: left;">
@@ -64,30 +65,8 @@
   						</div>
 
 					</div><br><br><br><hr>
-					<div>
-  						<div>
-  							<span style="font-weight:bolder; font-size: 15px;">Uday Pratap Singh</span>
-  							<span class="un">@uday 5min</span>
-  							<span style="float: right;"><a href="www.google.com">Grails</a></span>
-  						</div>
-  						<div>
-  							<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud</p>
-  						</div>
-  						<div>
-  							<span style="float: left;">
-  								<a href="#" class="fa fa-facebook fa-2x"></a>
-								<a href="#" class="fa fa-twitter fa-2x"></a>
-								<a href="#" class="fa fa-google fa-2x"></a>
-  							</span>
-  							<span style="float: right;">
-  								<a href="www.google.com">Download</a>&nbsp;&nbsp;
-  								<a href="www.google.com">View Full Site</a>&nbsp;&nbsp;
-  								<a href="www.google.com">Mark As Read</a>&nbsp;&nbsp;
-  								<a href="www.google.com">View Post</a>
-  							</span>
-  						</div>
+					</g:each>
 
-					</div>
 				</div>
 			</div>
 		</div>
@@ -96,12 +75,13 @@
 		<div class="row">
 			<div class="boxy col-lg-5">
 			<div class="boxy1">Topics</div>
-			<div>
+				<g:each in="${user.topics}">
+				<div>
   				<div style="font-size:15px;">
-  					<span style="font-weight: bolder;">Grails</span>&nbsp;&nbsp;<span><a href="#">Unsubscribe</a></span><br>
+  					<span style="font-weight: bolder;">${it.name}</span>&nbsp;&nbsp;<span><a href="#">Unsubscribe</a></span><br>
   					<span class="un">Subscriptions&nbsp;&nbsp;&nbsp;Post</span><br>
-  					<span>50</span>&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
-  					<span>20</span>
+  					<span>${assessment.Subscription.countByTopic(it)}</span>&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  					<span>${assessment.Resource.countByTopic(it)}</span>
   						<div>
 							<select name="Seriousness">
 	  							<option value="Serious">Serious</option>
@@ -113,18 +93,7 @@
   					</div>
 
 			</div><hr>
-			<div>
-  				<div style="font-size:15px;">
-  					<span style="font-weight: bolder;">Grails</span><br>
-  					<span class="un">Subscriptions&nbsp;&nbsp;&nbsp;Post</span><br>
-  					<span>50</span>&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
-  					<span>20</span>
-  						<div>
-							<a href="#">Subscribe</a>
-  						</div>
-  					</div>
-
-			</div>
+			</g:each>
 		</div>
 
 		</div>

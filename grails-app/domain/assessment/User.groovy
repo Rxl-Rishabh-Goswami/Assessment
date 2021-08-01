@@ -7,10 +7,12 @@ class User {
     String firstName
     String lastName
     String photo
+    String verificationToken
     Boolean admin
     Boolean active
     Date dateCreated
     Date lastUpdated
+
     static hasMany = [subscriptions:Subscription,topics:Topic,readingitems:ReadingItem,resources:Resource,resourceratings:ResourceRating]
     static constraints = {
         email(nullable: false,email: true,unique: true,blank: false)
@@ -21,6 +23,7 @@ class User {
         photo(nullable: true)
         active(nullable: true)
         admin(nullable: true)
+        verificationToken(nullable: true)
     }
     static mapping = {
         table 'global_user'

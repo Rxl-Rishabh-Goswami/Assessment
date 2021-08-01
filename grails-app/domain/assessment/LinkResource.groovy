@@ -1,8 +1,10 @@
 package assessment
 
 class LinkResource extends Resource{
-    String url
+    String linkurl
+
     static constraints = {
-        url nullable: false, blank: false
+        linkurl nullable: false, blank: false
+
     }
 }
