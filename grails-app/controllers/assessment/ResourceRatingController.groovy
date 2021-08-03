@@ -13,6 +13,5 @@ class ResourceRatingController {
         resource.addToResourceratings(rate)
         println rate.score
         rate.save(flush:true,failOnError:true)
-
     }
 }

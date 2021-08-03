@@ -32,6 +32,12 @@
 <g:if test="${flash.createDocument}">
 	<div class="alert alert-success" role="alert">${flash.createDocument}</div>
 </g:if>
+<g:if test="${flash.addSub}">
+    <div class="alert alert-success" role="alert">${flash.addSub}</div>
+</g:if>
+<g:if test="${flash.removeSub}">
+    <div class="alert alert-warning" role="alert">${flash.removeSub}</div>
+</g:if>
 
 <div class="container">
 		<div class="row">
@@ -79,8 +85,8 @@
 								<g:if test="${it.hasProperty('linkurl')}">
 									<g:link target="_blank" url="${it.linkurl}">View Full Site</g:link>&nbsp;&nbsp;
 								</g:if>
-								<g:else><g:link controller="resources" action="index" params="[resourceID:it.id]">View Post</g:link>&nbsp;&nbsp;</g:else>
-								<g:link>Mark As Read</g:link>&nbsp;&nbsp;
+								<g:link controller="resources" action="index" params="[resourceID:it.id]">View Post</g:link>&nbsp;&nbsp;
+								<g:link controller="readingItem" action="isRead" params="[resourceID: it.id]">Mark As Read</g:link>&nbsp;&nbsp;
 
 
   							</span>
@@ -98,8 +104,8 @@
 					 <span style="float:right;"><a href="#">View All</a></span>
 				</div>
 				<div class="boxy2">
-					<g:each in="${topic}">
-						<g:if test="${user.admin} || ${topic.user.username==user.username}">
+					<g:each in="${subscribe}">
+						<g:if test="${user.admin || (it.user.username== user.username)}">
 							<div>
 								<asset:image src="${it.user.photo}" class="img-circle img-thumbnail dp" alt="Profile Picture"/>
 								<div style="font-size:15px;">
@@ -160,11 +166,11 @@
 				</div>
 				<div class="boxy2">
 					<g:each in="${topic}">
-						<g:if test="${user.admin} || ${topic.user.username==user.username}">
+						<g:if test="${user.admin || (it.user.username==user.username)}">
 							<div>
 								<div style="font-size: 15px">
 									<asset:image src="${it.user.photo}" class="img-circle img-thumbnail dp" alt="Profile Picture"/>
-								<input type="text" name="Topic Name" value=${it.name}>
+								<input type="text" name="newTopicName" value=${it.name}>
 								<button class="btn btn-outline-success my-2 my-sm-0">Save</button>
 								<button class="btn btn-outline-danger my-2 my-sm-0">Cancel</button>
 								<br>
@@ -193,14 +199,14 @@
 								<div style="font-size: 15px">
 									<asset:image src="${it.user.photo}" class="img-circle img-thumbnail dp" alt="Profile Picture"/>
 									<div style="font-size:15px;">
-										<span style="font-weight: bolder;">${topic.name}</span>&nbsp;&nbsp;<span><g:link controller="subscription" action="addSubscription" >Subscribe</g:link></span><br>
-										<span class="un">@${topic.user.username}</span><br>
+										<span style="font-weight: bolder;">${it.name}</span>&nbsp;&nbsp;<span><g:link controller="subscription" action="addSubscription" >Subscribe</g:link></span><br>
+										<span class="un">@${it.user.username}</span><br>
 										<span class="un">Subscriptions&nbsp;&nbsp;&nbsp;Post</span><br>
 										<span>${assessment.Subscription.countByTopic(it)}</span>&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 										<span>${assessment.Resource.countByTopic(it)}</span>
 									</div>
 
-								</div>
+								</div><br><hr>
 						</g:else>
 					</g:each>
 

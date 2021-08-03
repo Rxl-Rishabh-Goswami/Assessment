@@ -8,6 +8,11 @@ class ResourcesController {
         List topic = Topic.list()
         def resourceID = params.resourceID as Long
         Resource resource = Resource.findWhere(id: resourceID)
+//        ReadingItem ri = ReadingItem.findByUserAndResource(user,resource)
+//        ri.isRead = true
+//        user.addToReadingitems(ri)
+//        resource.addToReadingitems(ri)
+//        ri.save(flush:true,failOnError:true)
         render(view: 'post',model: [user:user,resource:resource,topic:topic])
     }
     def createDocument(){
