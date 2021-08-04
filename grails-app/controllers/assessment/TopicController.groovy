@@ -32,6 +32,19 @@ class TopicController {
         flash.inviteSent = "Invite Sent to ${params.emailInvite} for topic ${params.topicInvite}!!"
         redirect(controller: 'login', action: 'dashboard')
     }
+    def allTopic(){
+        def allTopic = Topic.list()
+        User user = User.findWhere(username:session.username)
+        render(view:'adminTopic',model:[allTopic:allTopic, user:user])
+    }
+    def delete(){
+        println("Entered")
+        def topicID = params.topicID as Long
+        Topic topic = Topic.get(topicID)
+        topic.delete(flush:true,failOnError:true)
+        redirect(controller:'topic', action: 'allTopic')
+
+    }
 
 
 }

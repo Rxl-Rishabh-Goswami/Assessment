@@ -1,7 +1,7 @@
 package assessment
 
 class LoginController {
-//    SubscribeService subscribeService
+    SubscribeService subscribeService
     PostService postService
     def index() {
 
@@ -122,9 +122,10 @@ class LoginController {
         User user = User.findWhere(username: session.username)
 //        List topic = Topic.list()
         List trend = postService.trend()
-        List resource = Resource.list()
-        List subscribe = Subscription.findAllByUser(user)
-//        List subscribe = subscribeService.subscribeTopics(user)
+//        List resource = Resource.list()
+        List resource = subscribeService.inboxResource(user)
+//        List subscribe = Subscription.findAllByUser(user)
+        List subscribe = subscribeService.subscribeTopics(user)
         render(view: 'dashboard', model:[user:user,topic:trend,resource:resource,subscribe:subscribe])
     }
 

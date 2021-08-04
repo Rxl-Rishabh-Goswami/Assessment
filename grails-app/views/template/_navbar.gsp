@@ -29,8 +29,8 @@
                     <g:if test="${user.admin}"><g:link class="dropdown-item" controller="user" action="adminUser">Users</g:link></g:if>
 
                     <g:link class="dropdown-item" controller="user" action="changeProfile">Profile</g:link>
-                    <g:if test="${user.admin}"><g:link class="dropdown-item" controller="topic" action="index">Topics</g:link></g:if>
-                    <g:if test="${user.admin}"><g:link class="dropdown-item" controller="resources" action="index">Posts</g:link></g:if>
+                    <g:if test="${user.admin}"><g:link class="dropdown-item" controller="topic" action="allTopic">Topics</g:link></g:if>
+                    <g:if test="${user.admin}"><g:link class="dropdown-item" controller="resources" action="adminPost">Posts</g:link></g:if>
                     <div class="dropdown-divider"></div>
                     <g:link class="dropdown-item" controller="login" action="logout">Log Out</g:link>
                 </div>

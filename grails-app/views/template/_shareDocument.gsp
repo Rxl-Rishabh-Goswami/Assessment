@@ -1,3 +1,4 @@
+<%@ page import="assessment.User" %>
 <html>
 <head>
     <title></title>

@@ -6,9 +6,16 @@ import grails.gorm.transactions.Transactional
 class SubscribeService {
 
     def subscribeTopics(User user){
-        List<Subscription> sub = Subscription.findAllByUser(user)
-        List subTopic = Topic.findAllBySubscriptions(sub)
+        List sub = Subscription.findAllByUser(user)
+        List subTopic = sub.topic
         return subTopic
+    }
+    def inboxResource(User user){
+        List userRI = ReadingItem.findAllByUserAndIsRead(user,false)
+        List inbox = userRI*.resource
+
+
+        return inbox
 
     }
 

@@ -81,7 +81,7 @@
 								<a href="#" class="fa fa-google fa-2x"></a>
   							</span>
   							<span style="float: right;">
-								<g:if test="${it.hasProperty('filePath')}"><g:link>Download</g:link>&nbsp;&nbsp;</g:if>
+								<g:if test="${it.hasProperty('filePath')}"><g:link controller="resources" action="downloadDocument" id="${it.id}">Download</g:link>&nbsp;&nbsp;</g:if>
 								<g:if test="${it.hasProperty('linkurl')}">
 									<g:link target="_blank" url="${it.linkurl}">View Full Site</g:link>&nbsp;&nbsp;
 								</g:if>
@@ -109,7 +109,7 @@
 							<div>
 								<asset:image src="${it.user.photo}" class="img-circle img-thumbnail dp" alt="Profile Picture"/>
 								<div style="font-size:15px;">
-									<span style="font-weight: bolder;">${it.name}</span>&nbsp;&nbsp;<span><g:link controller="subscription" action="removeSubscription">Unsubscribe</g:link></span><br>
+									<span style="font-weight: bolder;">${it.name}</span>&nbsp;&nbsp;<span><g:link controller="subscription" action="removeSubscription" params="[subID:it.id]">Unsubscribe</g:link></span><br>
 									<span class="un">@${it.user.username}</span><br>
 									<span class="un">Subscriptions&nbsp;&nbsp;&nbsp;Post</span><br>
 									<span>${assessment.Subscription.countByTopic(it)}</span>&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -138,8 +138,8 @@
 							<div>
 								<asset:image src="${it.user.photo}" class="img-circle img-thumbnail dp" alt="Profile Picture"/>
 								<div style="font-size:15px;">
-									<span style="Wherefont-weight: bolder;">${topic.name}</span>&nbsp;&nbsp;<span><g:link controller="subscription" action="removeSubscription">Unsubscribe</g:link></span><br>
-									<span class="un">@${topic.user.username}</span><br>
+									<span style="Wherefont-weight: bolder;">${it.name}</span>&nbsp;&nbsp;<span><g:link controller="subscription" action="removeSubscription" params="[subID:it.id]">Unsubscribe</g:link></span><br>
+									<span class="un">@${it.user.username}</span><br>
 									<span class="un">Subscriptions&nbsp;&nbsp;&nbsp;Post</span><br>
 									<span>${assessment.Subscription.countByTopic(it)}</span>&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 									<span>${assessment.Resource.countByTopic(it)}</span>
@@ -199,7 +199,12 @@
 								<div style="font-size: 15px">
 									<asset:image src="${it.user.photo}" class="img-circle img-thumbnail dp" alt="Profile Picture"/>
 									<div style="font-size:15px;">
-										<span style="font-weight: bolder;">${it.name}</span>&nbsp;&nbsp;<span><g:link controller="subscription" action="addSubscription" >Subscribe</g:link></span><br>
+										<g:if test="${user.subscriptions.topic.contains(it)}">
+											<span style="font-weight: bolder;">${it.name}</span>&nbsp;&nbsp;<span><g:link controller="subscription" action="removeSubscription" params="[subID:it.id]">Unsubscribe</g:link></span><br>
+										</g:if>
+										<g:else>
+										<span style="font-weight: bolder;">${it.name}</span>&nbsp;&nbsp;<span><g:link controller="subscription" action="addSubscription" params="[subID:it.id]">Subscribe</g:link></span><br>
+										</g:else>
 										<span class="un">@${it.user.username}</span><br>
 										<span class="un">Subscriptions&nbsp;&nbsp;&nbsp;Post</span><br>
 										<span>${assessment.Subscription.countByTopic(it)}</span>&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;

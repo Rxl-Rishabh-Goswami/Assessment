@@ -44,7 +44,7 @@ class PostService {
         trend.sort {
             Topic topic -> -topic.resources.size()
         }
-        return trend.subList(0,5)
+        return trend
     }
 
 }
