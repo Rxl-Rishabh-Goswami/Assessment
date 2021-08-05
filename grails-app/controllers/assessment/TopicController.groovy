@@ -38,12 +38,19 @@ class TopicController {
         render(view:'adminTopic',model:[allTopic:allTopic, user:user])
     }
     def delete(){
-        println("Entered")
         def topicID = params.topicID as Long
         Topic topic = Topic.get(topicID)
         topic.delete(flush:true,failOnError:true)
         redirect(controller:'topic', action: 'allTopic')
-
+    }
+    def delete2(){
+        def topicID = params.topicID as Long
+        Topic topic = Topic.get(topicID)
+        topic.delete(flush:true,failOnError:true)
+        redirect(controller:'login', action: 'dashboard')
+    }
+    def editTopic(){
+        Topic topic = Topic.findWhere
     }
 
 

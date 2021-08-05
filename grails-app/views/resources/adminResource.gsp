@@ -21,11 +21,8 @@
     <div class="row">
         <div class="boxy col-lg-12">
             <div class="boxy1">
-                Users
+                Resources
                 <span style="float:right; font-size:12px;">
-                    <select>
-                        <option>All Users</option>
-                    </select>
                     <input type="text" placeholder="Search..">
                     <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
                 </span>

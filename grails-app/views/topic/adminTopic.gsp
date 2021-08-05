@@ -21,11 +21,8 @@
 	<div class="row">
 		<div class="boxy col-lg-12">
 			<div class="boxy1">
-				Users
+				Topics
 				<span style="float:right; font-size:12px;">
-					<select>
-						<option>All Users</option>
-					</select>
 					<input type="text" placeholder="Search..">
 					<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
 				</span>
@@ -48,7 +45,7 @@
 							<td>${it.id}</td>
 							<td>${it.user.username}</td>
 							<td>${it.name}</td>
-							<td>${it.dateCreated}</td>
+							<td>${it.dateCreated.dateString}</td>
 							<td>${assessment.Subscription.countByTopic(it)}</td>
 							<td>${assessment.Resource.countByTopic(it)}</td>
 							<td><g:link controller='topic' action='delete' params="[topicID:it.id]">Delete</g:link>

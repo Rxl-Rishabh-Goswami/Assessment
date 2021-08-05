@@ -23,51 +23,59 @@
 	<div class="container">
 	<div class="row">
 			<div class="boxy col-lg-5">
-				<div class="boxy1">Subscriptions
+				<div class="boxy1">Trending Topic
 				</div>
 				<div class="boxy2">
-					<g:each in="${subscribe}">
-					<div>
-						<asset:image src="${it.user.photo}" class="img-circle img-thumbnail dp" alt="Profile Picture"/>
-  						<div style="font-size:15px;">
-  							<input type="text" name="topicname" value="Grails">
-  							<button class="btn btn-outline-success my-2 my-sm-0">Save</button>
-  							<br>
-  							<span class="un">@uday</span><br>
-  							<span class="un">Subscriptions&nbsp;&nbsp;&nbsp;Post</span><br>
-  							<span>50</span>&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
-  							<span>20</span>
-  							<div>
-  								<select id="Privacy" name="Privacy">
-  									<option value="volvo">Private</option>
-  									<option value="saab">Public</option>
-								</select>
-								<select id="Seriousness" name="Seriousness">
-	  								<option value="volvo">Serious</option>
-	  								<option value="saab">Very Serious</option>
-	  								<option value="saab">Critical</option>
-								</select>
-								<a href="#" class="fa fa-envelope"></a>
-								<a href="#" class="fa fa-file-text"></a>
-								<a href="#" class="fa fa-trash"></a>
-  							</div>
+					<g:each in="${topic}">
+						<g:if test="${user.admin || (it.user.username==user.username)}">
+							<div>
+								<div style="font-size: 15px">
+									<asset:image src="${it.user.photo}" class="img-circle img-thumbnail dp" alt="Profile Picture"/>
+									<input type="text" name="newTopicName" value=${it.name}>
+									<button class="btn btn-outline-success my-2 my-sm-0">Save</button>
+									<button class="btn btn-outline-danger my-2 my-sm-0">Cancel</button>
+									<br>
+									<span class="un">@${it.user.username}</span><br>
+									<span class="un">Subscriptions&nbsp;&nbsp;&nbsp;Post</span><br>
+									<span>${assessment.Subscription.countByTopic(it)}</span>&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+									<span>${assessment.Resource.countByTopic(it)}</span>
+								</div>
+								<div>
+									<select id="Privacy" name="Privacy">
+										<option value="1">Private</option>
+										<option value="0">Public</option>
+									</select>
+									<select id="Seriousness" name="Seriousness">
+										<option value="0">Serious</option>
+										<option value="1">Very Serious</option>
+										<option value="2">Casual</option>
+									</select>
+									<a href="#" class="fa fa-envelope fa-2x"></a>
+									<a href="#" class="fa fa-file-text fa-2x"></a>
+									<a href="#" class="fa fa-trash fa-2x"></a>
+								</div>
+							</div><br><hr>
+						</g:if>
+						<g:else>
+							<div style="font-size: 15px">
+								<asset:image src="${it.user.photo}" class="img-circle img-thumbnail dp" alt="Profile Picture"/>
+								<div style="font-size:15px;">
+									<g:if test="${user.subscriptions.topic.contains(it)}">
+										<span style="font-weight: bolder;">${it.name}</span>&nbsp;&nbsp;<span><g:link controller="subscription" action="removeSubscription" params="[subID:it.id]">Unsubscribe</g:link></span><br>
+									</g:if>
+									<g:else>
+										<span style="font-weight: bolder;">${it.name}</span>&nbsp;&nbsp;<span><g:link controller="subscription" action="addSubscription" params="[subID:it.id]">Subscribe</g:link></span><br>
+									</g:else>
+									<span class="un">@${it.user.username}</span><br>
+									<span class="un">Subscriptions&nbsp;&nbsp;&nbsp;Post</span><br>
+									<span>${assessment.Subscription.countByTopic(it)}</span>&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+									<span>${assessment.Resource.countByTopic(it)}</span>
+								</div>
 
-  						</div>
-
-					</div><br><hr>
+							</div><br><hr>
+						</g:else>
 					</g:each>
-					<div>
-  						<img src="https://bootdey.com/img/Content/avatar/avatar6.png" class="img-circle img-thumbnail dp" alt="Profile Picture">
-  						<div style="font-size:15px;">
-  							<span><a href="#">Grails</a></span>&nbsp;&nbsp;
-  							<span><a href="#">Subscribe</a></span><br>
-  							<span class="un">@uday</span><br>
-  							<span class="un">Subscriptions&nbsp;&nbsp;&nbsp;Post</span><br>
-  							<span>50</span>&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
-  							<span>20</span>
-  						</div>
 
-					</div>
 				</div>
 			</div>
 			<div class="boxy col-lg-7">
@@ -81,7 +89,7 @@
 						<div>
   							<span style="font-weight:bolder; font-size: 15px;">${it.user.firstName} ${it.user.lastName}</span>
   							<span class="un">@${it.user.username} 5min</span>
-  							<span style="float: right;"><a href="www.google.com">${it.topic.name}</a></span>
+  							<span style="float: right;"><g:link controller="topic" action="index" params="[topicID:it.topic.id]">${it.topic.name}</g:link></span>
   						</div>
   						<div>
   							<p>${it.description}</p>
@@ -93,10 +101,12 @@
 								<a href="#" class="fa fa-google fa-2x"></a>
   							</span>
   							<span style="float: right;">
-  								<a href="www.google.com">Download</a>&nbsp;&nbsp;
-  								<a href="www.google.com">View Full Site</a>&nbsp;&nbsp;
-  								<a href="www.google.com">Mark As Read</a>&nbsp;&nbsp;
-  								<a href="www.google.com">View Post</a>
+							<g:if test="${it.hasProperty('filePath')}"><g:link controller="resources" action="downloadDocument" id="${it.id}">Download</g:link>&nbsp;&nbsp;</g:if>
+							<g:if test="${it.hasProperty('linkurl')}">
+								<g:link target="_blank" url="${it.linkurl}">View Full Site</g:link>&nbsp;&nbsp;
+							</g:if>
+							<g:link controller="resources" action="index" params="[resourceID:it.id]">View Post</g:link>&nbsp;&nbsp;
+							<g:link controller="readingItem" action="isRead" params="[resourceID: it.id]">Mark As Read</g:link>&nbsp;&nbsp;
   							</span>
   						</div>
 
@@ -116,7 +126,7 @@
   						<div>
   							<span style="font-weight:bolder; font-size: 15px;">${it.user.firstName} ${it.user.lastName}</span>
   							<span class="un">@${it.user.username} 5min</span>
-  							<span style="float: right;"><a href="www.google.com">${it.topic.name}</a></span>
+  							<span style="float: right;"><g:link controller="topic" action="index" params="[topicID:it.topic.id]">${it.topic.name}</g:link></span>
   						</div>
   						<div>
   							<p>${it.description}</p>
@@ -128,10 +138,12 @@
 								<a href="#" class="fa fa-google fa-2x"></a>
   							</span>
   							<span style="float: right;">
-  								<a href="www.google.com">Download</a>&nbsp;&nbsp;
-  								<a href="www.google.com">View Full Site</a>&nbsp;&nbsp;
-  								<a href="www.google.com">Mark As Read</a>&nbsp;&nbsp;
-  								<a href="www.google.com">View Post</a>
+								<g:if test="${it.hasProperty('filePath')}"><g:link controller="resources" action="downloadDocument" id="${it.id}">Download</g:link>&nbsp;&nbsp;</g:if>
+								<g:if test="${it.hasProperty('linkurl')}">
+									<g:link target="_blank" url="${it.linkurl}">View Full Site</g:link>&nbsp;&nbsp;
+								</g:if>
+								<g:link controller="resources" action="index" params="[resourceID:it.id]">View Post</g:link>&nbsp;&nbsp;
+								<g:link controller="readingItem" action="isRead" params="[resourceID: it.id]">Mark As Read</g:link>&nbsp;&nbsp;
   							</span>
   						</div>
 

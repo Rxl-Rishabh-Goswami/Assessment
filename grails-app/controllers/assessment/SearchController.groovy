@@ -9,9 +9,10 @@ PostService postService
         String searchKey = params.searchKey
         String key = '%'+searchKey+'%'
         List recent = postService.recent()
+        List trend = postService.trend()
         List searchPost = Resource.createCriteria().list() {
                 ilike('description',key)
         }
-        render(view: 'Search',model: [user:user,searchPost:searchPost,searchKey: searchKey,recent:recent])
+        render(view: 'Search',model: [user:user,searchPost:searchPost,searchKey: searchKey,recent:recent,topic:trend])
     }
 }

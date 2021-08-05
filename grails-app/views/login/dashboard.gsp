@@ -5,7 +5,6 @@
 	<title>Link Sharing</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<g:if env="development"><asset:stylesheet src="index.css"/></g:if>
-
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -115,25 +114,24 @@
 									<span>${assessment.Subscription.countByTopic(it)}</span>&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 									<span>${assessment.Resource.countByTopic(it)}</span>
 									<div>
-										<select  name="Privacy">
-											<option value="Private">Private</option>
-											<option value="Public">Public</option>
+										<select  name="privacy" id="${it.id}">
+											<option value="1">Private</option>
+											<option value="0">Public</option>
 										</select>
-										<select name="Seriousness">
-											<option value="Serious">Serious</option>
-											<option value="Very_Serious">Very Serious</option>
-											<option value="Casual">Casual</option>
-										</select>
-										<a href="#" class="fa fa-envelope"></a>
-										<a href="#" class="fa fa-file-text"></a>
-										<a href="#" class="fa fa-trash"></a>
+										<select name="seriousness" id="${it.id}">
+											<option value="0">Serious</option>
+											<option value="1">Very Serious</option>
+											<option value="2">Casual</option>
+										</select>&nbsp;
+										<g:link controller="topic" action="delete2" class="fa fa-trash fa-lg" params="[topicID: it.id]"></g:link>&nbsp;
+										<a data-toggle="modal" data-target="#editTopic" class="fa fa-file-text fa-lg" ></a>&nbsp;
+										<a data-toggle="modal" data-target="#sendInvite" class="fa fa-envelope fa-lg"></a>&nbsp;
 									</div>
 
 								</div>
 
 							</div><br><hr>
-
-						</g:if>
+                        </g:if>
 						<g:else>
 							<div>
 								<asset:image src="${it.user.photo}" class="img-circle img-thumbnail dp" alt="Profile Picture"/>
@@ -145,14 +143,14 @@
 									<span>${assessment.Resource.countByTopic(it)}</span>
 									<div>
 										<select name="Seriousness">
-											<option value="Serious">Serious</option>
-											<option value="Very_Serious">Very Serious</option>
-											<option value="Casual">Casual</option>
-										</select>
-										<a href="#" class="fa fa-envelope"></a>
+											<option value="0">Serious</option>
+											<option value="1">Very Serious</option>
+											<option value="2">Casual</option>
+										</select>&nbsp;
+                                        <a data-toggle="modal" data-target="#sendInvite" class="fa fa-envelope fa-lg"></a>&nbsp;
 									</div>
 
-								</div>
+								</div><br><hr>
 
 							</div>
 						</g:else>
@@ -167,8 +165,8 @@
 				<div class="boxy2">
 					<g:each in="${topic}">
 						<g:if test="${user.admin || (it.user.username==user.username)}">
-							<div>
-								<div style="font-size: 15px">
+							<div style="font-size: 15px">
+								<div>
 									<asset:image src="${it.user.photo}" class="img-circle img-thumbnail dp" alt="Profile Picture"/>
 								<input type="text" name="newTopicName" value=${it.name}>
 								<button class="btn btn-outline-success my-2 my-sm-0">Save</button>
@@ -181,17 +179,17 @@
 								</div>
 								<div>
 									<select id="Privacy" name="Privacy">
-										<option value="volvo">Private</option>
-										<option value="saab">Public</option>
+										<option value="1">Private</option>
+										<option value="0">Public</option>
 									</select>
 									<select id="Seriousness" name="Seriousness">
-										<option value="volvo">Serious</option>
-										<option value="saab">Very Serious</option>
-										<option value="saab">Critical</option>
+										<option value="0">Serious</option>
+										<option value="1">Very Serious</option>
+										<option value="2">Casual</option>
 									</select>
-									<a href="#" class="fa fa-envelope fa-2x"></a>
-									<a href="#" class="fa fa-file-text fa-2x"></a>
-									<a href="#" class="fa fa-trash fa-2x"></a>
+                                    <g:link controller="topic" action="delete2" class="fa fa-trash fa-lg" params="[topicID: it.id]"></g:link>&nbsp;
+                                    <a data-toggle="modal" data-target="#editTopic" class="fa fa-file-text fa-lg" ></a>&nbsp;
+                                    <a data-toggle="modal" data-target="#sendInvite" class="fa fa-envelope fa-lg"></a>&nbsp;
 								</div>
 							</div><br><hr>
 						</g:if>
@@ -239,6 +237,12 @@
 
 
 <g:render template="/template/shareLink"/>
+
+
+<g:render template="/template/editTopic"/>
+
+
+
 
 
 
