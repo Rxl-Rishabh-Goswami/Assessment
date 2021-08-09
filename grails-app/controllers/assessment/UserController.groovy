@@ -51,4 +51,26 @@ class UserController {
         }
 
     }
+    def adminUser(){
+        User user = User.findWhere(username: session.username)
+        def allUser = User.findAll()
+        render(view: 'adminuser',model: [allUser:allUser,user: user])
+
+    }
+    def deactivate(){
+        def userID = params.userID as Long
+        User testUser = User.get(userID)
+        testUser.active = false
+        testUser.save(flush:true,failOnError:true)
+        redirect(controller:'user', action: 'adminUser')
+
+    }
+    def activate(){
+        def userID = params.userID as Long
+        User testUser = User.get(userID)
+        testUser.active = true
+        testUser.save(flush:true,failOnError:true)
+        redirect(controller:'user', action: 'adminUser')
+
+    }
 }

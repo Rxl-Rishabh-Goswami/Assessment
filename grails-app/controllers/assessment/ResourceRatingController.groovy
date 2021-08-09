@@ -8,11 +8,11 @@ class ResourceRatingController {
         def resourceID = params.resourceID as Long
         Resource resource = Resource.findWhere(id:resourceID)
         ResourceRating rate = new ResourceRating()
-        rate.score = params.r
+        def rateScore = params.r as int
+        rate.score = rateScore
         user.addToResourceratings(rate)
         resource.addToResourceratings(rate)
         println rate.score
         rate.save(flush:true,failOnError:true)
-
     }
 }

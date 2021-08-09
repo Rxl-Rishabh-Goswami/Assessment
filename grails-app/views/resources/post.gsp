@@ -22,7 +22,7 @@
 		<div class="boxy col-lg-7">
 				<div class="boxy2">
 					<div>
-  						<img src="https://bootdey.com/img/Content/avatar/avatar6.png" class="img-circle img-thumbnail dp" alt="Profile Picture">
+						<asset:image src="${resource.user.photo}" class="img-circle img-thumbnail dp" alt="Profile Picture"/>
   						<div>
   							<span style="font-weight:bolder; font-size: 15px;">${resource.user.firstName} ${resource.user.lastName}</span>
   							<span class="un">@${resource.user.username} 5min</span>
@@ -74,7 +74,7 @@
 				<div class="boxy2">
 					<g:each in="${topic}">
 					<div>
-  						<img src="https://bootdey.com/img/Content/avatar/avatar6.png" class="img-circle img-thumbnail dp" alt="Profile Picture">
+						<asset:image src="${it.user.photo}" class="img-circle img-thumbnail dp" alt="Profile Picture"/>
   						<div style="font-size:15px;">
   							<span>${it.name}</span>
   							<br>
@@ -100,18 +100,6 @@
 
 					</div><br><hr>
 					</g:each>
-					<div>
-  						<img src="https://bootdey.com/img/Content/avatar/avatar6.png" class="img-circle img-thumbnail dp" alt="Profile Picture">
-  						<div style="font-size:15px;">
-  							<span><a href="#">Grails</a></span>&nbsp;&nbsp;
-  							<span><a href="#">Subscribe</a></span><br>
-  							<span class="un">@uday</span><br>
-  							<span class="un">Subscriptions&nbsp;&nbsp;&nbsp;Post</span><br>
-  							<span>50</span>&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
-  							<span>20</span>
-  						</div>
-
-					</div>
 				</div>
 			</div>
 	</div>

@@ -6,7 +6,7 @@
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <g:link controller="login" action="dashboard" class="navbar-brand heading" style="font-size:30px;">Link Sharing</g:link>
-
+    <g:if test="!${admin}">
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -26,10 +26,11 @@
 
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <g:if test="${user.admin}"><g:link class="dropdown-item" controller="user" action="adminUser">Users</g:link></g:if>
+
                     <g:link class="dropdown-item" controller="user" action="changeProfile">Profile</g:link>
-                    <g:link class="dropdown-item" controller="user" action="index">Users</g:link>
-                    <g:link class="dropdown-item" controller="topic" action="index">Topics</g:link>
-                    <g:link class="dropdown-item" controller="resources" action="index">Posts</g:link>
+                    <g:if test="${user.admin}"><g:link class="dropdown-item" controller="topic" action="allTopic">Topics</g:link></g:if>
+                    <g:if test="${user.admin}"><g:link class="dropdown-item" controller="resources" action="adminPost">Posts</g:link></g:if>
                     <div class="dropdown-divider"></div>
                     <g:link class="dropdown-item" controller="login" action="logout">Log Out</g:link>
                 </div>
@@ -43,11 +44,12 @@
                 </a>
             </li>
         </ul>
-        <form class="form-inline my-2 my-lg-0">
-            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-        </form>
+        <g:form controller="search" action="searchPage" class="form-inline my-2 my-lg-0">
+            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="searchKey">
+            <g:submitButton class="btn btn-outline-success my-2 my-sm-0" name="submit" value="Submit"/>
+        </g:form>
     </div>
+</g:if>
 </nav>
 
 </body>

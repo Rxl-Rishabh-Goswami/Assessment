@@ -27,7 +27,7 @@
 		<div class="boxy col-lg-5">
 			<div class="boxy1">Topic : <span>${topic.name}</span></div>
 			<div>
-  				<img src="https://bootdey.com/img/Content/avatar/avatar6.png" class="img-circle img-thumbnail dp" alt="Profile Picture">
+				<asset:image src="${topic.user.photo}" class="img-circle img-thumbnail dp" alt="Profile Picture"/>
   				<div style="font-size:15px;">
   					<span style="font-weight: bolder;">${topic.name}</span>&nbsp;&nbsp;<span><a href="#">Unsubscribe</a></span><br>
   					<span class="un">@${topic.user.username}</span><br>
@@ -58,8 +58,8 @@
 				<div class="boxy2">
 					<g:each in="${topic.resources}">
 					<div>
-  						<img src="https://bootdey.com/img/Content/avatar/avatar6.png" class="img-circle img-thumbnail dp" alt="Profile Picture">
-  						<div>
+						<asset:image src="${it.user.photo}" class="img-circle img-thumbnail dp" alt="Profile Picture"/>
+						<div>
   							<p>${it.description}</p>
   						</div>
   						<div>
@@ -69,14 +69,17 @@
 								<a href="#" class="fa fa-google fa-2x"></a>
   							</span>
   							<span style="float: right;">
-  								<a href="www.google.com">Download</a>&nbsp;&nbsp;
-  								<a href="www.google.com">View Full Site</a>&nbsp;&nbsp;
-  								<a href="www.google.com">Mark As Read</a>&nbsp;&nbsp;
-  								<a href="www.google.com">View Post</a>
-  							</span>
+								<g:if test="${it.hasProperty('filePath')}"><g:link controller="resources" action="downloadDocument" id="${it.id}">Download</g:link>&nbsp;&nbsp;</g:if>
+								<g:if test="${it.hasProperty('linkurl')}">
+									<g:link target="_blank" url="${it.linkurl}">View Full Site</g:link>&nbsp;&nbsp;
+								</g:if>
+								<g:link controller="resources" action="index" params="[resourceID:it.id]">View Post</g:link>&nbsp;&nbsp;
+								<g:link controller="readingItem" action="isRead" params="[resourceID: it.id]">Mark As Read</g:link>&nbsp;&nbsp;
+
+							</span>
   						</div>
 
-					</div><br><br><br><hr>
+					</div><br><br><br><br><br><br><hr>
 					</g:each>
 				</div>
 			</div>	
@@ -89,10 +92,9 @@
 
 				</div>
 				<div class="boxy2">
-					<g:each in="${topic.user}">
+					<g:each in="${topic.subscriptions.user}">
 					<div>
-  						<img src="https://bootdey.com/img/Content/avatar/avatar6.png" class="img-circle img-thumbnail dp" alt="Profile Picture">
-  						<div style="font-size:15px;">
+						<asset:image src="${it.photo}" class="img-circle img-thumbnail dp" alt="Profile Picture"/>  						<div style="font-size:15px;">
   							<span style="font-weight: bolder;">${it.firstName} ${it.lastName}</span><br>
   							<span class="un">@${it.username}</span><br>
   							<span class="un">Subscriptions&nbsp;&nbsp;&nbsp;Topics</span><br>

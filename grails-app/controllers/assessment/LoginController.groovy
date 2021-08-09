@@ -1,10 +1,14 @@
 package assessment
 
 class LoginController {
-
+    SubscribeService subscribeService
+    PostService postService
     def index() {
-        List resource = Resource.list()
-        render(view: 'index', model: [resource:resource])
+
+        List recent = postService.recent()
+//        List top = postService.top()
+        List top = Resource.listOrderByResourceratings(max:5,offset: 0,order:"desc")
+        render(view: 'index', model: [top:top,recent:recent])
     }
     def loginuser() {
         User user = User.findWhere(username: params['username'], password: params['password'])
@@ -116,9 +120,13 @@ class LoginController {
     }
     def dashboard(){
         User user = User.findWhere(username: session.username)
-        List topic = Topic.list()
-        List resource = Resource.list()
-        render(view: 'dashboard', model:[user:user,topic:topic,resource:resource])
+//        List topic = Topic.list()
+        List trend = postService.trend()
+//        List resource = Resource.list()
+        List resource = subscribeService.inboxResource(user)
+//        List subscribe = Subscription.findAllByUser(user)
+        List subscribe = subscribeService.subscribeTopics(user)
+        render(view: 'dashboard', model:[user:user,topic:trend,resource:resource,subscribe:subscribe])
     }
 
 

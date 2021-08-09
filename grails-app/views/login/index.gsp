@@ -55,7 +55,7 @@
 			<div class="boxy col-lg-7">
 				<div class="boxy1">Recent Shares</div>
 				<div class="boxy2">
-					<g:each in="${resource}">
+					<g:each in="${recent}">
 						<div>
 							<asset:image src="${it.user.photo}" class="img-circle img-thumbnail dp" alt="Profile Picture"/>
 							<div>
@@ -140,15 +140,15 @@
 					<span>Top Posts</span>
 					<span style="float: right;">
 						<select name="date" style="font-size: small;">
-							<option>Tomorrow</option>
-							<option>Yesterday</option>
-							<option>Day Before Yesterday</option>
-							<option>Last Week</option>
+							<option value="today">Today</option>
+							<option value="week">1 week</option>
+							<option value="month">1 month</option>
+							<option value="year">1 year</option>
 						</select>
 					</span>
 				</div>
 				<div class="boxy2">
-					<g:each in="${resource}">
+					<g:each in="${top}">
 					<div>
 						<asset:image src="${it.user.photo}" class="img-circle img-thumbnail dp" alt="Profile Picture"/>
   						<div>
