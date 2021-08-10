@@ -1,19 +1,46 @@
 package assessment
 
+import assessment.dto.PostDto
+import grails.converters.JSON
+
+
+
 
 class ResourcesController {
-
+    PostService postService
     def index() {
         User user = User.findWhere(username: session.username)
         List topic = Topic.list()
         def resourceID = params.resourceID as Long
         Resource resource = Resource.findWhere(id: resourceID)
-//        ReadingItem ri = ReadingItem.findByUserAndResource(user,resource)
-//        ri.isRead = true
-//        user.addToReadingitems(ri)
-//        resource.addToReadingitems(ri)
-//        ri.save(flush:true,failOnError:true)
-        render(view: 'post',model: [user:user,resource:resource,topic:topic])
+        ResourceRating rr = ResourceRating.findByUserAndResource(user,resource)
+        if(rr){
+            def userRate = rr.score
+            render(view: 'post',model: [user:user,resource:resource,topic:topic,userRate:userRate])
+
+        }
+        else{
+            render(view: 'post',model: [user:user,resource:resource,topic:topic])
+        }
+    }
+    def indexAfterChange(String resourceID){
+        User user = User.findWhere(username: session.username)
+        List topic = Topic.list()
+        def ID = resourceID as Long
+        Resource resource = Resource.findWhere(id: ID)
+        ResourceRating rr = ResourceRating.findByUserAndResource(user,resource)
+        if(rr){
+            def userRate = rr.score
+            render(view: 'post',model: [user:user,resource:resource,topic:topic,userRate:userRate])
+
+        }
+        else{
+            render(view: 'post',model: [user:user,resource:resource,topic:topic])
+        }
+
+
+
+
     }
     def createDocument(){
         User user = User.findWhere(username: session.username)
@@ -93,6 +120,44 @@ class ResourcesController {
         Resource resource = Resource.get(resourceID)
         resource.delete(flush:true,failOnError:true)
         redirect(action: 'adminPost')
+    }
+    def resourceEdit(){
+        User user = User.findWhere(username: session.username)
+        def resourceID = params.resourceID as Long
+        Resource r = Resource.get(resourceID)
+        if(params.newDescription){
+            r.description = params.newDescription
+        }
+        if(params.newFile.size !=0){
+            def doc = request.getFile("newFile")
+            String origin = doc.getOriginalFilename()
+            if (origin) {
+                File file = new File("/home/rxlogix/IdeaProjects/Assessment/grails-app/assets/documents/${user.username}_${r.topic.id}_${origin}")
+                doc.transferTo(file)
+                r.filePath =file.path
+            }
+        }
+        if(params.newUrl){
+            r.linkurl = params.newUrl
+        }
+        r.save(flush:true,failOnError:true)
+        redirect(action: 'indexAfterChange',params:[resourceID:resourceID])
+    }
+    def recentPost(){
+        List recent = postService.recent()
+        List<PostDto> recentDetails = []
+        recent.each {
+            recentDetails << new PostDto(firstName: it.user.firstName,lastName: it.user.lastName,username: it.user.username,photo: it.user.photo,description: it.description,name: it.topic.name)
+        }
+        render(recentDetails as JSON)
+    }
+    def topPost(){
+        List top = postService.top()
+        List<PostDto> topDetails = []
+        top.each {
+            topDetails << new PostDto(firstName: it.user.firstName,lastName: it.user.lastName,username: it.user.username,photo: it.user.photo,description: it.description,name: it.topic.name)
+        }
+        render(topDetails as JSON)
     }
 
 }

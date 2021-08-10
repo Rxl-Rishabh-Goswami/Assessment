@@ -18,5 +18,12 @@ class SubscribeService {
         return inbox
 
     }
+    def changeSeriousness(Subscription sub,String ser){
+
+        int value = ser as int
+        Enum s = sub.seriousness.convert(value)
+        sub.seriousness = s
+        sub.save(flush:true,failOnError:true)
+    }
 
 }

@@ -35,11 +35,9 @@
   					<span>${assessment.Subscription.countByTopic(topic)}</span>&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
   					<span>${assessment.Resource.countByTopic(topic)}</span>
   						<div>
-							<select id="Seriousness" name="Seriousness">
-	  							<option value="volvo">Serious</option>
-	  							<option value="saab">Very Serious</option>
-	  							<option value="saab">Critical</option>
-							</select>
+							<g:form controller="subscription" action="changeSeriousness" params="[topicID:topic.id]">
+								<g:select onchange="submit(name)" name="Ser" from="${[0: 'Serious', 1: 'Very Serious', 2: 'Casual']}" value="${assessment.Subscription.findByUserAndTopic(user,topic).seriousness}" optionKey="key" optionValue="value"/>
+							</g:form>
 							<a href="#" class="fa fa-envelope"></a>
   						</div>
   					</div>

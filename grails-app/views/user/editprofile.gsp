@@ -31,6 +31,9 @@
 <g:if test="${flash.passwordNotUpdated}">
 	<div class="alert alert-danger" role="alert">${flash.passwordNotUpdated}</div>
 </g:if>
+<g:if test="${flash.usernameTaken}">
+	<div class="alert alert-danger" role="alert">${flash.usernameTaken}</div>
+</g:if>
 
 
 	<div class="container">
@@ -70,14 +73,6 @@
 						<g:textField class="form-control" name="username" placeholder="Enter User Name"/>
 						</div>
 						<div class="form-group">
-						<label>Password</label>
-						<g:passwordField class="form-control" name="password" placeholder="Enter Password"/>
-						</div>
-						<div class="form-group">
-						<label>Confirm Password</label>
-						<g:passwordField class="form-control" name="confirm" placeholder="Enter Password Again"/>
-						</div>
-						<div class="form-group">
 						<label>Profile Picture</label><br>
 						<input type="file" class="form-group" name="profilePhoto">
 						</div>
@@ -89,41 +84,31 @@
 			<div class="row">
 				<div class="boxy col-lg-5">
 				<div class="boxy1">Topics
-					<span style="font-size:10px; float: right;">
-						<input type="text" placeholder="Search..">
-						<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-					</span>
+					%{--<span style="font-size:10px; float: right;">--}%
+						%{--<input type="text" placeholder="Search..">--}%
+						%{--<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>--}%
+					%{--</span>--}%
 				</div>
 				<div class="boxy2">
 					<g:each in="${user.topics}">
-					<div>
-						<asset:image src="${user.photo}" class="img-circle img-thumbnail dp" alt="Profile Picture"/>
-  						<div style="font-size:15px;">
-  							<input type="text" name="topicname" value="${it.name}">
-  							<button class="btn btn-outline-success my-2 my-sm-0">Save</button>
-  							<br>
-  							<span class="un">@${user.username}</span><br>
-  							<span class="un">Subscriptions&nbsp;&nbsp;&nbsp;Post</span><br>
-  							<span>${assessment.Subscription.countByTopic(it)}</span>&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-  							<span>${assessment.Resource.countByTopic(it)}</span>
-  							<div>
-  								<select id="Privacy" name="Privacy">
-  									<option value="volvo">Private</option>
-  									<option value="saab">Public</option>
-								</select>
-								<select id="Seriousness" name="Seriousness">
-	  								<option value="volvo">Serious</option>
-	  								<option value="saab">Very Serious</option>
-	  								<option value="saab">Critical</option>
-								</select>
-								<a href="#" class="fa fa-envelope"></a>
-								<a href="#" class="fa fa-file-text"></a>
-								<a href="#" class="fa fa-trash"></a>
-  							</div>
+						<div>
+							<g:link controller="user" action="index" params="[userID:it.user.id]">
+								<asset:image src="${it.user.photo}" class="img-circle img-thumbnail dp" alt="Profile Picture"/></g:link>
+							<g:form controller="topic" action="editTopicName">
+								<g:textField type="text" name="newTopicName" value='${it.name}'/>
+								<g:hiddenField name="topicName" value="${it.name}"/>
+								<g:submitButton name="submit" value="Submit" class="btn btn-outline-success my-2 my-sm-0"/>
+							</g:form>
 
-  						</div>
 
-					</div><br><br><br><br><hr>
+							<br>
+							<g:link controller="user" action="index" params="[userID:it.user.id]">
+								<span class="un">@${it.user.username}</span><br>
+							</g:link>
+							<span class="un">Subscriptions&nbsp;&nbsp;&nbsp;Post</span><br>
+							<span>${assessment.Subscription.countByTopic(it)}</span>&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							<span>${assessment.Resource.countByTopic(it)}</span>
+						</div><br><br><br>
 					</g:each>
 				</div>
 			</div>

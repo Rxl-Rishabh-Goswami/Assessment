@@ -9,7 +9,7 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-	
+
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 </head>
@@ -20,13 +20,13 @@
 			<div class="boxy col-lg-5">
 				<div class="boxy2">
 					<div>
-						<asset:image src="${user.photo}" class="img-circle img-thumbnail dp" alt="Profile Picture"/>
+						<asset:image src="${og.photo}" class="img-circle img-thumbnail dp" alt="Profile Picture"/>
   						<div style="font-size:15px;">
-  							<span style="font-weight: bolder;">${user.firstName} ${user.lastName}</span><br>
-  							<span class="un">@${user.username}</span><br>
+  							<span style="font-weight: bolder;">${og.firstName} ${og.lastName}</span><br>
+  							<span class="un">@${og.username}</span><br>
   							<span class="un">Subscriptions&nbsp;&nbsp;&nbsp;Topics</span><br>
-  							<span>${assessment.Subscription.countByUser(user)}</span>&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-  							<span>${assessment.Topic.countByUser(user)}</span>
+  							<span>${assessment.Subscription.countByUser(og)}</span>&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  							<span>${assessment.Topic.countByUser(og)}</span>
   						</div>
 
 					</div>
@@ -40,12 +40,12 @@
 					</span>
 				</div>
 				<div class="boxy2">
-					<g:each in="${user.resources}">
+					<g:each in="${og.resources}">
 					<div>
 						<div>
-  							<span style="font-weight:bolder; font-size: 15px;">${user.firstName} ${user.lastName}</span>
-  							<span class="un">@${user.username} 5min</span>
-  							<span style="float: right;"><a href="www.google.com">${it.topic.name}</a></span>
+  							<span style="font-weight:bolder; font-size: 15px;">${og.firstName} ${og.lastName}</span>
+  							<span class="un">@${og.username} 5min</span>
+  							<span style="float: right;"><g:link controller="topic" action="index" params="[topicID:it.topic.id]">${it.topic.name}</g:link></span>
   						</div>
   						<div>
   							<p>${it.description}</p>
@@ -57,11 +57,11 @@
 								<a href="#" class="fa fa-google fa-2x"></a>
   							</span>
   							<span style="float: right;">
-  								<a href="www.google.com">Download</a>&nbsp;&nbsp;
-  								<a href="www.google.com">View Full Site</a>&nbsp;&nbsp;
-  								<a href="www.google.com">Mark As Read</a>&nbsp;&nbsp;
-  								<a href="www.google.com">View Post</a>
-  							</span>
+								<g:if test="${it.hasProperty('filePath')}"><g:link controller="resources" action="downloadDocument" id="${it.id}">Download</g:link>&nbsp;&nbsp;</g:if>
+								<g:if test="${it.hasProperty('linkurl')}">
+									<g:link target="_blank" url="${it.linkurl}">View Full Site</g:link>&nbsp;&nbsp;
+								</g:if>
+								<g:link controller="resources" action="index" params="[resourceID:it.id]">View Post</g:link>&nbsp;&nbsp;
   						</div>
 
 					</div><br><br><br><hr>
@@ -75,24 +75,37 @@
 		<div class="row">
 			<div class="boxy col-lg-5">
 			<div class="boxy1">Topics</div>
-				<g:each in="${user.topics}">
+				<g:each in="${og.topics}">
 				<div>
   				<div style="font-size:15px;">
-  					<span style="font-weight: bolder;">${it.name}</span>&nbsp;&nbsp;<span><a href="#">Unsubscribe</a></span><br>
+  					<span ><g:link controller="topic" action="index" params="[topicID:it.id]">${it.name}</g:link></span>&nbsp;&nbsp;
+				<g:if test="${assessment.Subscription.findByUserAndTopic(user,it)}">
+					<g:if test="${it.user!=user}">
+					<span  style="float: right">
+						<g:link controller="subscription" action="removeSubscription" params="[subID:it.id]">Unsubscribe</g:link>
+					</span>
+					</g:if>
+				</g:if>
+					<g:else>
+						<span style="float: right">
+							<g:link controller="subscription" action="addSubscription" params="[subID:it.id]">Subscribe</g:link>
+						</span>
+					</g:else>
+					<br>
   					<span class="un">Subscriptions&nbsp;&nbsp;&nbsp;Post</span><br>
   					<span>${assessment.Subscription.countByTopic(it)}</span>&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
   					<span>${assessment.Resource.countByTopic(it)}</span>
-  						<div>
-							<select name="Seriousness">
-	  							<option value="Serious">Serious</option>
-	  							<option value="Very_Serious">Very Serious</option>
-	  							<option value="Critical">Critical</option>
-							</select>
-							<a href="#" class="fa fa-envelope"></a>
-  						</div>
+					<g:if test="${assessment.Subscription.findByUserAndTopic(user,it)}">
+  						<span style="float: right">
+							<g:form controller="subscription" action="changeSeriousness" params="[topicID:it.id]">
+								<g:select onchange="submit(name)" name="Ser" from="${[0: 'Serious', 1: 'Very Serious', 2: 'Casual']}" value="${assessment.Subscription.findByUserAndTopic(user,it).seriousness}" optionKey="key" optionValue="value"/>
+							</g:form>
+							<a data-toggle="modal" data-target="#sendInvite" class="fa fa-envelope"></a>
+  						</span>
+					</g:if>
   					</div>
 
-			</div><hr>
+			</div><br><hr>
 			</g:each>
 		</div>
 
@@ -103,20 +116,34 @@
 			<div class="boxy col-lg-5">
 				<div>
 				<div class="boxy1">Subscriptions</div>
-  				<div style="font-size:15px;">
-  				<span><a href="#">Grails</a></span><br>
+  				<g:each in="${og.subscriptions.topic}">
+				<div style="font-size:15px;">
+  				<span><g:link controller="topic" action="index" params="[topicID:it.id]">${it.name}</g:link></span>
+					<span style="float: right">
+						<g:if test="${assessment.Subscription.findByUserAndTopic(user,it)}">
+							<g:if test="${it.user != user}">
+							<g:link controller="subscription" action="removeSubscription" params="[subID:it.id]">Unsubscribe</g:link>
+							</g:if>
+						</g:if>
+						<g:else>
+							<g:link controller="subscription" action="addSubscription" params="[subID:it.id]">Subscribe</g:link>
+						</g:else>
+
+					</span>
+					<br>
   					<span class="un">Subscriptions&nbsp;&nbsp;&nbsp;Post</span><br>
-  					<span>50</span>&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
-  					<span>20</span>
-  						<div>
-							<select name="Seriousness">
-								<option value="Serious">Serious</option>
-								<option value="Very_Serious">Very Serious</option>
-								<option value="Critical">Critical</option>
-							</select>
-							<a href="#" class="fa fa-envelope"></a>
-  						</div>
-  					</div>
+  					<span>${assessment.Subscription.countByTopic(it)}</span>&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  					<span>${assessment.Resource.countByTopic(it)}</span>
+					<g:if test="${assessment.Subscription.findByUserAndTopic(user,it)}">
+  						<span style="float: right">
+							<g:form controller="subscription" action="changeSeriousness" params="[topicID:it.id]">
+								<g:select onchange="submit(name)" name="Ser" from="${[0: 'Serious', 1: 'Very Serious', 2: 'Casual']}" value="${assessment.Subscription.findByUserAndTopic(user,it).seriousness}" optionKey="key" optionValue="value"/>
+							</g:form>
+							<a data-toggle="modal" data-target="#sendInvite" class="fa fa-envelope"></a>
+  						</span>
+					</g:if>
+  					</div><br><hr>
+				</g:each>
 
 			</div><hr>
 			</div>

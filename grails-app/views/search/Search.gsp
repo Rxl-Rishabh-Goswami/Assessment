@@ -27,13 +27,37 @@
 				</div>
 				<div class="boxy2">
 					<g:each in="${topic}">
-						<g:if test="${user.admin || (it.user.username==user.username)}">
-							<div>
-								<div style="font-size: 15px">
+						<g:if test="${user.admin || (it.user==user)}">
+							<div class="nonEdit" style="font-size: 15px">
+
+								<asset:image src="${it.user.photo}" class="img-circle img-thumbnail dp" alt="Profile Picture"/>
+								<div style="font-size:15px;">
+									<g:if test="${user.subscriptions.topic.contains(it)}">
+										<g:link controller="topic" action="index" params="[topicID:it.id]">
+											<span style="font-weight: bolder;">${it.name}</span>&nbsp;&nbsp;</g:link>
+										<span style="float: right">
+											<g:if test="${!(it.user == user)}">
+												<g:link controller="subscription" action="removeSubscription" params="[subID:it.id]">Unsubscribe</g:link>
+											</g:if>
+										</span>
+									</g:if>
+									<g:else>
+										<span style="font-weight: bolder;">${it.name}</span>&nbsp;&nbsp;<span><g:link controller="subscription" action="addSubscription" params="[subID:it.id]">Subscribe</g:link></span>
+									</g:else>
+								&nbsp;&nbsp; <button class="openEdit btn btn-outline-warning my-2 my-sm-0">Edit</button><br>
+									<span class="un">@${it.user.username}</span><br>
+									<span class="un">Subscriptions&nbsp;&nbsp;&nbsp;Post</span><br>
+									<span>${assessment.Subscription.countByTopic(it)}</span>&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+									<span>${assessment.Resource.countByTopic(it)}</span>
+								</div>
+
+							</div><br><hr>
+							<div class="editTopicByOwner" style="font-size: 15px">
+								<div>
 									<asset:image src="${it.user.photo}" class="img-circle img-thumbnail dp" alt="Profile Picture"/>
 									<input type="text" name="newTopicName" value=${it.name}>
 									<button class="btn btn-outline-success my-2 my-sm-0">Save</button>
-									<button class="btn btn-outline-danger my-2 my-sm-0">Cancel</button>
+									<button class="btn btn-outline-danger my-2 my-sm-0 closeEdit">Cancel</button>
 									<br>
 									<span class="un">@${it.user.username}</span><br>
 									<span class="un">Subscriptions&nbsp;&nbsp;&nbsp;Post</span><br>
@@ -41,18 +65,19 @@
 									<span>${assessment.Resource.countByTopic(it)}</span>
 								</div>
 								<div>
-									<select id="Privacy" name="Privacy">
+
+									<select onchange="this.form.submit()" id="${it.id}" name="Seriousness">
 										<option value="1">Private</option>
 										<option value="0">Public</option>
 									</select>
-									<select id="Seriousness" name="Seriousness">
+									<select onchange="this.form.submit()" id="${it.id}" name="Privacy">
 										<option value="0">Serious</option>
 										<option value="1">Very Serious</option>
 										<option value="2">Casual</option>
 									</select>
-									<a href="#" class="fa fa-envelope fa-2x"></a>
-									<a href="#" class="fa fa-file-text fa-2x"></a>
-									<a href="#" class="fa fa-trash fa-2x"></a>
+									<g:link controller="topic" action="delete2" class="fa fa-trash fa-lg" params="[topicID: it.id]"></g:link>&nbsp;
+									<a data-toggle="modal" data-target="#editTopic" class="fa fa-file-text fa-lg" ></a>&nbsp;
+									<a data-toggle="modal" data-target="#sendInvite" class="fa fa-envelope fa-lg"></a>&nbsp;
 								</div>
 							</div><br><hr>
 						</g:if>
@@ -61,10 +86,13 @@
 								<asset:image src="${it.user.photo}" class="img-circle img-thumbnail dp" alt="Profile Picture"/>
 								<div style="font-size:15px;">
 									<g:if test="${user.subscriptions.topic.contains(it)}">
-										<span style="font-weight: bolder;">${it.name}</span>&nbsp;&nbsp;<span><g:link controller="subscription" action="removeSubscription" params="[subID:it.id]">Unsubscribe</g:link></span><br>
+										<g:link controller="topic" action="index" params="[topicID:it.id]">
+											<span style="font-weight: bolder;">${it.name}</span>&nbsp;&nbsp;<span><g:link controller="subscription" action="removeSubscription" params="[subID:it.id]">Unsubscribe</g:link></span><br>
+										</g:link>
 									</g:if>
 									<g:else>
-										<span style="font-weight: bolder;">${it.name}</span>&nbsp;&nbsp;<span><g:link controller="subscription" action="addSubscription" params="[subID:it.id]">Subscribe</g:link></span><br>
+										<g:link controller="topic" action="index" params="[topicID:it.id]"><span style="font-weight: bolder;">${it.name}</span></g:link>&nbsp;&nbsp;
+										<span><g:link controller="subscription" action="addSubscription" params="[subID:it.id]">Subscribe</g:link></span><br>
 									</g:else>
 									<span class="un">@${it.user.username}</span><br>
 									<span class="un">Subscriptions&nbsp;&nbsp;&nbsp;Post</span><br>
@@ -106,7 +134,7 @@
 								<g:link target="_blank" url="${it.linkurl}">View Full Site</g:link>&nbsp;&nbsp;
 							</g:if>
 							<g:link controller="resources" action="index" params="[resourceID:it.id]">View Post</g:link>&nbsp;&nbsp;
-							<g:link controller="readingItem" action="isRead" params="[resourceID: it.id]">Mark As Read</g:link>&nbsp;&nbsp;
+
   							</span>
   						</div>
 
@@ -143,7 +171,6 @@
 									<g:link target="_blank" url="${it.linkurl}">View Full Site</g:link>&nbsp;&nbsp;
 								</g:if>
 								<g:link controller="resources" action="index" params="[resourceID:it.id]">View Post</g:link>&nbsp;&nbsp;
-								<g:link controller="readingItem" action="isRead" params="[resourceID: it.id]">Mark As Read</g:link>&nbsp;&nbsp;
   							</span>
   						</div>
 
@@ -154,6 +181,42 @@
 				</div>
 			</div>
 		</div>
+
+
+<g:render template="/template/createTopic"/>
+
+
+<g:render template="/template/shareDocument"/>
+
+
+<g:render template="/template/sendInvite"/>
+
+
+<g:render template="/template/shareLink"/>
+
+
+<g:render template="/template/editTopic"/>
+
+
+
+
+
+
+
+
+
+
+<script>
+	$('.editTopicByOwner').hide();
+	$('.openEdit').click(function(){
+		$('.nonEdit').hide();
+		$('.editTopicByOwner').show();
+	});
+	$('.closeEdit').click(function(){
+		$('.nonEdit').show();
+		$('.editTopicByOwner').hide();
+	});
+</script>
 
 </body>
 </html>

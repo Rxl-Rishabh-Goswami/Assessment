@@ -1,6 +1,7 @@
 package assessment
 
 class TopicController {
+    TopicService topicService
 
     def index() {
         User user = User.findWhere(username: session.username)
@@ -21,17 +22,6 @@ class TopicController {
         flash.createTopic = "Topic ${topic.name} Successfully Created !!!"
         redirect(controller:'login', action: 'dashboard')
     }
-    def inviteTopic(){
-        def topic = params.topicInvite
-        def send = params.emailInvite
-        sendMail{
-            to send
-            subject 'Subscribe: '
-            body 'Subscribe This Interesting Topic'
-        }
-        flash.inviteSent = "Invite Sent to ${params.emailInvite} for topic ${params.topicInvite}!!"
-        redirect(controller: 'login', action: 'dashboard')
-    }
     def allTopic(){
         def allTopic = Topic.list()
         User user = User.findWhere(username:session.username)
@@ -49,8 +39,35 @@ class TopicController {
         topic.delete(flush:true,failOnError:true)
         redirect(controller:'login', action: 'dashboard')
     }
+
+    def changeVisibility(){
+        def topicID = params.topicID as Long
+        Topic topic = Topic.get(topicID)
+        topicService.changeVisibility(topic,params.Pri)
+        redirect(controller: 'login', action: 'dashboard')
+
+    }
     def editTopic(){
-        Topic topic = Topic.findWhere
+        Long topicID = params.topicID as Long
+        Topic topic = Topic.get(topicID)
+        println topic
+        topic.name = params.newName
+//        int value = params.topicVisibility as int
+//        Enum pri = topic.visibility.convert(value)
+//        topic.visibility = pri
+        topic.save(flush:true,saveOnError:true)
+        redirect(controller: 'login', action: 'dashboard')
+
+    }
+    def editTopicName(){
+        Topic topic = Topic.findByName(params.topicName)
+        String newName = params.newTopicName
+        topic.name = newName
+        println newName
+        println topic
+
+        topic.save(flush:true,failOnError:true)
+        redirect(controller:'login',action:'dashboard')
     }
 
 

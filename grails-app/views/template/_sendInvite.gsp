@@ -13,14 +13,14 @@
                 </button>
             </div>
             <div class="modal-body">
-                <g:form controller="topic" action="inviteTopic">
+                <g:form controller="subscription" action="inviteSubscription">
                     <div class="form-group">
                     <label>Email</label>
-                    <g:textField class="form-control" name="emailInvite"></g:textField>
+                    <g:textField required="true" class="form-control" name="emailInvite"></g:textField>
                     </div>
                     <div class="form-group">
                     <label>Topic</label>
-                    <g:select class="form-control" name="topicInvite" from="${assessment.Topic.getAll().name}"/>
+                    <g:select class="form-control" name="topicInvite" from="${user.subscriptions.topic.name}"/>
                     </div>
                     <div class="modal-footer">
                         <g:submitButton name="submit" class="btn btn-primary" value="Submit"/>

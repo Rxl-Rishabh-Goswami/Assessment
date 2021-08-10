@@ -16,15 +16,15 @@
                 <g:form controller="resources" action="createLink">
                     <div class="form-group">
                     <label>Link</label><br>
-                    <g:textField class="form-control" name="link"/><br>
+                    <g:textField required="true" class="form-control" name="link"/><br>
                     </div>
                     <div class="form-group">
                     <label>Description</label><br>
-                    <g:textArea class="form-control" name="linkDescription"></g:textArea>
+                    <g:textArea required="true" class="form-control" name="linkDescription"></g:textArea>
                     </div>
                     <div class="form-group">
                     <label>Topic</label><br>
-                    <g:select class="form-control" name="topicLink" from="${assessment.Topic.getAll().name}"/>
+                    <g:select class="form-control" name="topicLink" from="${user.subscriptions.topic.name}"/>
                     </div>
                     <div class="modal-footer">
                         <g:submitButton name="submit" class="btn btn-primary" value="Submit"/>

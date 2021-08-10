@@ -4,8 +4,18 @@ class Topic {
     String name
     Date dateCreated
     Date lastUpdated
+    enum Visibility {
+        Public , Private
+        def convert(int value){
+            if(value==0){return Visibility.Public}
+            else{return Visibility.Private}
+        }
+    }
+
     Visibility visibility
-    enum Visibility {Public , Private}
+
+
+
     static hasMany = [resources:Resource,subscriptions:Subscription]
     static belongsTo = [user:User]
     static constraints = {

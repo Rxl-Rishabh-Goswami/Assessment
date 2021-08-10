@@ -1,17 +1,19 @@
 package assessment
 
+import grails.converters.JSON
+
 class LoginController {
     SubscribeService subscribeService
     PostService postService
     def index() {
 
         List recent = postService.recent()
-//        List top = postService.top()
-        List top = Resource.listOrderByResourceratings(max:5,offset: 0,order:"desc")
+        List top = postService.top()
+        //List top = Resource.listOrderByResourceratings(max:5,offset: 0,order:"desc")
         render(view: 'index', model: [top:top,recent:recent])
     }
     def loginuser() {
-        User user = User.findWhere(username: params['username'], password: params['password'])
+        User user = User.findWhere(username: params['username'], password: params['password'],active: true)
         if(!user){
             user = User.findWhere(email: params['username'], password: params['password'])
         }
@@ -22,10 +24,11 @@ class LoginController {
         }
         else{
             flash.logoutMessage = "Username or Password Doesn't Match any Records"
-            redirect(action:'index')
+            redirect(url:'http://localhost:9091/')
 
         }
     }
+
     def register(){
         if(params['password'] == params['confirm']) {
 
@@ -39,18 +42,27 @@ class LoginController {
                 profilePhoto.transferTo(file)
                 user.photo ="/profilePicture/${params.username}.jpg"
             }
-            if(params.profilePhoto==null){
-                user.photo="https://bootdey.com/img/Content/avatar/avatar6.png"
+            else{
+                user.photo="/profilePicture/default/unknown.jpg"
+                println params.profilePhoto
             }
-            user.save(flush:true,failOnError:true)
-            flash.message = "User Created Successully, Please Log In"
-            redirect(action: 'index')
+            user.validate()
+            if(user.hasErrors()){
+                flash.registerError = "User Can't Be Registered"
+                redirect(url:'http://localhost:9091/')
+            }
+            else {
+                user.save(flush:true,failOnError:true)
+                flash.message = "User Created Successully, Please Log In"
+                redirect(url:'http://localhost:9091/')
+            }
+
 
 
         }
         else{
             flash.error = "Errr...!!! Some Issue, Try Again!"
-            redirect(action:'index')
+            redirect(url:'http://localhost:9091/')
         }
     }
     def forgetPassword(){
@@ -70,7 +82,7 @@ class LoginController {
                         body 'Click On The Link To Change Password : http://localhost:9091/login/emailPassword?token='+ uniqueToken
                     }
             flash.emailChangePassword="Verification Link Sent On Email, Please Check"
-            redirect(action: 'index')
+            redirect(url:'http://localhost:9091/')
 
 
 
@@ -104,11 +116,11 @@ class LoginController {
             user.verificationToken = null
             user.save(flush:true, failOnError:true)
             flash.changePassword = "Password Changed"
-            redirect(action: 'index')
+            redirect(url:'http://localhost:9091/')
         }
         else{
             flash.errorChangePassword = "Errr...!!! Try Again, Credentials Don't Match"
-            redirect(action: 'index')
+            redirect(url:'http://localhost:9091/')
         }
 
 
@@ -116,7 +128,7 @@ class LoginController {
     def logout(){
         session.invalidate()
         flash.logOut = "You've Been Logged Out, See You Soon !!!"
-        redirect(action: 'index')
+        redirect(url:'http://localhost:9091/')
     }
     def dashboard(){
         User user = User.findWhere(username: session.username)
