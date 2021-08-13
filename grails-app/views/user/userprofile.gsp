@@ -4,6 +4,8 @@
 	<meta charset="utf-8">
 	<title>Link Sharing</title>
 	<g:if env="development"><asset:stylesheet src="index.css"/></g:if>
+	<g:if env="development"><asset:stylesheet src="background.css.css"/></g:if>
+	<asset:javascript src="markAsRead.js"></asset:javascript>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -17,7 +19,7 @@
 <g:render template="/template/navbar"/>
 	<div class="container">
 		<div class="row">
-			<div class="boxy col-lg-5">
+			<div class="cool col-lg-5">
 				<div class="boxy2">
 					<div>
 						<asset:image src="${og.photo}" class="img-circle img-thumbnail dp" alt="Profile Picture"/>
@@ -32,14 +34,15 @@
 					</div>
 				</div>
 			</div>
-			<div class="boxy col-lg-7">
+			<div class="col-lg-1"></div>
+			<div class="cool col-lg-6">
 				<div class="boxy1"> Posts
-					<span style="font-size:10px; float: right;">
-						<input type="text" placeholder="Search..">
-						<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-					</span>
+					%{--<span style="font-size:10px; float: right;">--}%
+						%{--<input type="text" placeholder="Search..">--}%
+						%{--<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>--}%
+					%{--</span>--}%
 				</div>
-				<div class="boxy2">
+				<div class="postOnUserPage boxy2">
 					<g:each in="${og.resources}">
 					<div>
 						<div>
@@ -73,10 +76,11 @@
 	</div>
 	<div class="container">
 		<div class="row">
-			<div class="boxy col-lg-5">
+			<div class="cool col-lg-5">
 			<div class="boxy1">Topics</div>
+				<div class="topicsAtUserPage">
 				<g:each in="${og.topics}">
-				<div>
+				<div class="topicsAtUserPage boxy2">
   				<div style="font-size:15px;">
   					<span ><g:link controller="topic" action="index" params="[topicID:it.id]">${it.name}</g:link></span>&nbsp;&nbsp;
 				<g:if test="${assessment.Subscription.findByUserAndTopic(user,it)}">
@@ -95,14 +99,36 @@
   					<span class="un">Subscriptions&nbsp;&nbsp;&nbsp;Post</span><br>
   					<span>${assessment.Subscription.countByTopic(it)}</span>&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
   					<span>${assessment.Resource.countByTopic(it)}</span>
-					<g:if test="${assessment.Subscription.findByUserAndTopic(user,it)}">
-  						<span style="float: right">
-							<g:form controller="subscription" action="changeSeriousness" params="[topicID:it.id]">
-								<g:select onchange="submit(name)" name="Ser" from="${[0: 'Serious', 1: 'Very Serious', 2: 'Casual']}" value="${assessment.Subscription.findByUserAndTopic(user,it).seriousness}" optionKey="key" optionValue="value"/>
+					<p>
+						<g:form style="display: inline-block" controller="topic"
+								action="changeVisibility" params="[topicID: it.id]">
+							<g:select onchange="submit(name)" name="Pri"
+									  from="${[0: 'Public', 1: 'Private']}" value="${it.visibility}"
+									  optionKey="key" optionValue="value"/>
+						</g:form>
+
+						<g:if test="${assessment.Subscription.findByUserAndTopic(user, it)}">
+							<g:form style="display: inline-block" controller="subscription"
+									action="changeSeriousness" params="[topicID: it.id]">
+								<g:select onchange="submit(name)" name="Ser"
+										  from="${[0: 'Serious', 1: 'Very Serious', 2: 'Casual']}"
+										  value="${assessment.Subscription.findByUserAndTopic(user, it).seriousness}"
+										  optionKey="key" optionValue="value"/>
 							</g:form>
-							<a data-toggle="modal" data-target="#sendInvite" class="fa fa-envelope"></a>
-  						</span>
-					</g:if>
+						</g:if>
+						<button style="display: inline-block; float: right"
+								onclick="deleteTopic('${it.id}')"
+								class="btn btn-outline-dark fa fa-trash fa-lg"></button>&nbsp;
+						<button style="display: inline-block; float: right" data-toggle="modal"
+								data-target="#editTopic"
+								class="btn btn-outline-dark fa fa-file-text fa-lg"></button>&nbsp;
+					<g:render template="/template/editTopic"
+							  model="[topicID: it.id, topicName: it.name]"/>
+						<button style="display: inline-block; float: right" data-toggle="modal"
+								data-target="#sendInviteByTopic"
+								class="btn btn-outline-dark fa fa-envelope fa-lg"></button>&nbsp;
+					<g:render template="/template/sendInviteByTopic" model="[topicName: it.name]"/>
+					</p>
   					</div>
 
 			</div><br><hr>
@@ -113,20 +139,25 @@
 	</div>
 	<div class="container">
 		<div class="row">
-			<div class="boxy col-lg-5">
+			<div class="cool col-lg-5">
 				<div>
 				<div class="boxy1">Subscriptions</div>
+					<div class="boxy2 subscriptionsAtUserPage">
   				<g:each in="${og.subscriptions.topic}">
 				<div style="font-size:15px;">
   				<span><g:link controller="topic" action="index" params="[topicID:it.id]">${it.name}</g:link></span>
 					<span style="float: right">
 						<g:if test="${assessment.Subscription.findByUserAndTopic(user,it)}">
 							<g:if test="${it.user != user}">
-							<g:link controller="subscription" action="removeSubscription" params="[subID:it.id]">Unsubscribe</g:link>
+								<button class="btn btn-danger"
+										onclick="unsubscribe('${it.id}')">Unsubscribe</button>
 							</g:if>
 						</g:if>
 						<g:else>
-							<g:link controller="subscription" action="addSubscription" params="[subID:it.id]">Subscribe</g:link>
+							<g:if test="${it.user != user}">
+								<button class="btn btn-success"
+										onclick="subscribe('${it.id}')">Subscribe</button>
+							</g:if>
 						</g:else>
 
 					</span>
@@ -136,10 +167,20 @@
   					<span>${assessment.Resource.countByTopic(it)}</span>
 					<g:if test="${assessment.Subscription.findByUserAndTopic(user,it)}">
   						<span style="float: right">
-							<g:form controller="subscription" action="changeSeriousness" params="[topicID:it.id]">
-								<g:select onchange="submit(name)" name="Ser" from="${[0: 'Serious', 1: 'Very Serious', 2: 'Casual']}" value="${assessment.Subscription.findByUserAndTopic(user,it).seriousness}" optionKey="key" optionValue="value"/>
-							</g:form>
-							<a data-toggle="modal" data-target="#sendInvite" class="fa fa-envelope"></a>
+							<p>
+								<g:form style="display: inline-block;" controller="subscription"
+										action="changeSeriousness" params="[topicID: it.id]">
+									<g:select onchange="submit(name)" name="Ser"
+											  from="${[0: 'Serious', 1: 'Very Serious', 2: 'Casual']}"
+											  value="${assessment.Subscription.findByUserAndTopic(user, it).seriousness}"
+											  optionKey="key" optionValue="value"/>
+								</g:form>
+
+								<button style="display: inline-block; float: right" data-toggle="modal"
+										data-target="#sendInviteByTopic"
+										class="btn btn-outline-dark fa fa-envelope fa-lg"></button>&nbsp;
+								<g:render template="/template/sendInviteByTopic"
+										  model="[topicName: it.name]"/></p>
   						</span>
 					</g:if>
   					</div><br><hr>
@@ -162,5 +203,14 @@
 
 
 <g:render template="/template/shareLink"/>
+
+
+
+
+
+
+<div class="bg"></div>
+<div class="bg bg2"></div>
+<div class="bg bg3"></div>
 </body>
 </html>

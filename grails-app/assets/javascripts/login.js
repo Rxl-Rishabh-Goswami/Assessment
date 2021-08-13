@@ -12,7 +12,7 @@ function demo(){
 							<image src="assets`+value.photo+`" class="img-circle img-thumbnail dp" alt="Profile Picture"/>
 							<div>
 								<span>`+value.firstName+`  `+value.lastName+`</span>
-								<span class="un">@`+value.username+` 5min</span>
+								<span class="un">@`+value.username+`</span>
 								<span style="float: right;"><a href="www.google.com">`+value.name+`</a></span>
 							</div>
 							<div>
@@ -24,12 +24,9 @@ function demo(){
 									<a href="#" class="fa fa-twitter fa-2x"></a>
 									<a href="#" class="fa fa-google fa-2x"></a>
 								</span>
-								<span style="float: right;">
-									<a href="www.google.com">View Post</a>
-								</span>
 							</div>
 
-						</div><br><br><br><br><br><br><hr>`
+						</div><br><br><br><br><br><br><hr> `
 
                   h+=temp
               })
@@ -41,22 +38,22 @@ function demo(){
 
 
 $(document).ready(demo1);
-function demo1(){
-    setInterval(function(){
+function demo1() {
+    setInterval(function () {
         $.ajax({
             url: "http://localhost:9091/resources/topPost",
-            success: function(result){
-                var h=""
-                $.each(result,function(index,value){
+            success: function (result) {
+                var h = ""
+                $.each(result, function (index, value) {
                     var temp = `<div class="boxy2">
-							<image src="assets`+value.photo+`" class="img-circle img-thumbnail dp" alt="Profile Picture"/>
+							<image src="assets` + value.photo + `" class="img-circle img-thumbnail dp" alt="Profile Picture"/>
 							<div>
-								<span>`+value.firstName+`  `+value.lastName+`</span>
-								<span class="un">@`+value.username+` 5min</span>
-								<span style="float: right;"><a href="www.google.com">`+value.name+`</a></span>
+								<span>` + value.firstName + `  ` + value.lastName + `</span>
+								<span class="un">@` + value.username + ` 5min</span>
+								<span style="float: right;"><a href="www.google.com">` + value.name + `</a></span>
 							</div>
 							<div>
-								<p>`+value.description+`</p>
+								<p>` + value.description + `</p>
 							</div>
 							<div>
 								<span style="float: left;">
@@ -71,13 +68,38 @@ function demo1(){
 
 						</div><br><br><br><br><br><br><hr>`
 
-                    h+=temp
+                    h += temp
                 })
                 $(".topPost").html(h)
             }
         })
-    },1500)
+    }, 1500)
 }
+
+
+
+
+
+
+
+
+//     $('#demo').pagination({
+//         dataSource: 'http://localhost:9091/resources/recentPost?max&page',
+//         locator: 'items',
+//         totalNumber: 10,
+//         pageSize: 5,
+//         ajax: {
+//             beforeSend: function() {
+//                 dataContainer.html('Loading');
+//             }
+//         },
+//         callback: function(data, pagination) {
+//             // template method of yourself
+//             var html = template(data);
+//             dataContainer.html(html);
+//         }
+//     })
+// }
 
 
 

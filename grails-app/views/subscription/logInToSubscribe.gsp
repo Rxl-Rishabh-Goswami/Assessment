@@ -24,6 +24,9 @@
         <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
     </form>
 </nav>
+<g:if test="${flash.wrongPassword}">
+    <div class="alert alert-danger" role="alert">${flash.wrongPassword}</div>
+</g:if>
 <h3>${flash.message}</h3>
 <div class="container" style="padding: 100px">
     <div class="boxy1" style="text-align: center">Log In To Subscribe</div>

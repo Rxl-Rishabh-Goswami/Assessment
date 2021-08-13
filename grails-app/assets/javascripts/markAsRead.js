@@ -39,13 +39,17 @@ function subscribe(topicID) {
     })
 
 }
-function changeVisibility(topicID,Pri){
-    let dataUrl="http://localhost:9091/topic/changeVisibility"
+function changePrivacy(topicID,Pri){
+    console.log("Testttt")
+    console.log(topicID)
+    console.log(Pri)
+    let dataUrl="http://localhost:9091/topic/changePrivacy"
     $.ajax({
         "url":dataUrl,
         "type": "get",
         "data":{topicID:topicID,Pri:Pri},
         success: function() {
+            console.log("success")
             setTimeout(function() {
                 window.location.reload()
             },1000)
@@ -67,12 +71,12 @@ function deleteTopic(topicID) {
 }
 
 
-function editTopicName(topicName,name) {
-    let dataUrl="http://localhost:9091/topic/editTopicName"
+function editTopicName(topicID,newName) {
+    let dataUrl="http://localhost:9091/topic/editTopic"
     $.ajax({
         "url":dataUrl,
-        "type": "get",
-        "data":{topicName:topicName,name:name},
+        "type": "post",
+        "data":{topicID:topicID,newName:newName},
         success: function() {
             setTimeout(function() {
                 window.location.reload()
@@ -80,4 +84,29 @@ function editTopicName(topicName,name) {
         }
     })
 }
+
+
+
+function removeSpaces(string) {
+    return string.split(' ').join('');
+}
+
+// $("#update").click(function(e) {
+//     e.preventDefault();
+//     let newName = $("#newName").val();
+//     let topicID = $("#topicID").val();
+//     $.ajax({
+//         type:'POST',
+//         data:{topicID:topicID,newName:newName},
+//         url:'http://localhost:9091/topic/editTopic',
+//         success:function() {
+//             console.log("HEYY")
+//             setTimeout(function() {
+//                 window.location.reload()
+//             },1000)
+//         }
+//     });
+// });
+
+
 

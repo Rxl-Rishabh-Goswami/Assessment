@@ -8,6 +8,7 @@
 
 
     <asset:stylesheet src="index.css"/>
+    <asset:stylesheet src="background.css"/>
     <asset:javascript src="datatable.js"/>
     <asset:stylesheet src="dataTables.css"/>
 
@@ -30,7 +31,7 @@
 <g:render template="/template/navbar"/>
 <div class="container">
     <div class="row">
-        <div class="boxy col-lg-12">
+        <div class="cool col-lg-12">
             <div class="boxy1">
                 Resources
             </div>
@@ -69,6 +70,10 @@
 
     </div>
 </div>
+
+<div class="bg"></div>
+<div class="bg bg2"></div>
+<div class="bg bg3"></div>
 
 </body>
 </html>

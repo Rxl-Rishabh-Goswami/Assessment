@@ -5,6 +5,7 @@
 	<title>Link Sharing</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<g:if env="development"><asset:stylesheet src="index.css"/></g:if>
+	<g:if env="development"><asset:stylesheet src="background.css"/></g:if>
 
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 
@@ -38,7 +39,7 @@
 
 	<div class="container">
 		<div class="row">
-			<div class="boxy col-lg-5">
+			<div class="cool col-lg-5">
 				<div class="boxy1">User Profile</div>
 				<div class="boxy2">
 					<div>
@@ -57,20 +58,21 @@
 					</div>
 				</div>
 			</div>
-			<div class="boxy col-lg-7">
-				<div class="boxy1">Update Profile</div>
+			<div class="col-lg-1"></div>
+			<div class="cool col-lg-6">
+				<div class="boxy1">Update Profile</div><br>
 				<g:uploadForm controller="user" action="editProfile">
 						<div class="form-group">
 						<label>First Name</label>
-						<g:textField class="form-control" name="firstName" placeholder="Enter First Name"/>
+						<g:textField onBlur="this.value=removeSpaces(this.value)" class="form-control" name="firstName" placeholder="Enter First Name"/>
 						</div>
 						<div class="form-group">
 						<label>Last Name</label>
-						<g:textField class="form-control" name="lastName" placeholder="Enter Last Name"/>
+						<g:textField onBlur="this.value=removeSpaces(this.value)" class="form-control" name="lastName" placeholder="Enter Last Name"/>
 						</div>
 						<div class="form-group">
 						<label>User Name</label>
-						<g:textField class="form-control" name="username" placeholder="Enter User Name"/>
+						<g:textField onBlur="this.value=removeSpaces(this.value)" class="form-control" name="username" placeholder="Enter User Name"/>
 						</div>
 						<div class="form-group">
 						<label>Profile Picture</label><br>
@@ -82,21 +84,21 @@
 			</div>
 		</div>
 			<div class="row">
-				<div class="boxy col-lg-5">
+				<div class="cool col-lg-5">
 				<div class="boxy1">Topics
 					%{--<span style="font-size:10px; float: right;">--}%
 						%{--<input type="text" placeholder="Search..">--}%
 						%{--<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>--}%
 					%{--</span>--}%
 				</div>
-				<div class="boxy2">
+				<div class="topicsAtEditUser boxy2">
 					<g:each in="${user.topics}">
 						<div>
 							<g:link controller="user" action="index" params="[userID:it.user.id]">
 								<asset:image src="${it.user.photo}" class="img-circle img-thumbnail dp" alt="Profile Picture"/></g:link>
-							<g:form controller="topic" action="editTopicName">
-								<g:textField type="text" name="newTopicName" value='${it.name}'/>
-								<g:hiddenField name="topicName" value="${it.name}"/>
+							<g:form controller="topic" action="editTopic">
+								<g:textField type="text" name="newName" value='${it.name}'/>
+								<g:hiddenField name="topicID" value="${it.id}"/>
 								<g:submitButton name="submit" value="Submit" class="btn btn-outline-success my-2 my-sm-0"/>
 							</g:form>
 
@@ -112,8 +114,9 @@
 					</g:each>
 				</div>
 			</div>
-				<div class="boxy col-lg-7">
-				<div class="boxy1">Change Password</div>
+				<div class="col-lg-1"></div>
+				<div class="cool col-lg-6">
+				<div class="boxy1">Change Password</div><br>
 					<g:form controller="user" action="updatePassword">
 						<div class="form-group">
 						<label>New Password :</label>
@@ -141,5 +144,11 @@
 
 
 <g:render template="/template/shareLink"/>
+
+
+<div class="bg"></div>
+<div class="bg bg2"></div>
+<div class="bg bg3"></div>
+
 </body>
 </html>

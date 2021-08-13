@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-
+    <asset:javascript src="markAsRead.js"/>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -12,7 +12,7 @@
     </button>
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
+        <ul style="display: inline-block;float: right" class="navbar-nav mr-auto">
             <li class="nav-item active">
                 <a class="nav-link" data-toggle="modal" data-target="#sendInvite"><i class="fa fa-envelope fa-2x"></i></a>
             </li>
@@ -43,9 +43,13 @@
                 <a class="nav-link" data-toggle="modal" data-target="#shareLink"><i class="fa fa-link fa-2x"></i>
                 </a>
             </li>
+            <li class="nav-item">
+                <g:link controller="login" action="allUserAndTopic" class="nav-link"><i class="fa fa-2x fa-search" aria-hidden="true"></i>
+                </g:link>
+            </li>
         </ul>
-        <g:form controller="search" action="searchPage" class="form-inline my-2 my-lg-0">
-            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="searchKey">
+        <g:form style="display: inline-block;float: right" controller="search" action="searchPage" class="form-inline my-2 my-lg-0">
+            <input onBlur="this.value=removeSpaces(this.value)" id="#searchInbox" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="searchKey">
             <g:submitButton class="btn btn-outline-success my-2 my-sm-0" name="submit" value="Submit"/>
         </g:form>
     </div>

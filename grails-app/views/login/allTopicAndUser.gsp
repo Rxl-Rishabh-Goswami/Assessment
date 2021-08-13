@@ -13,11 +13,23 @@
 
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
-    <asset:javascript src="search.js"/>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+
+    <asset:javascript src="datatable.js"/>
+    <asset:stylesheet src="dataTables.css"/>
+
+    <g:javascript>
+        $(document).ready(function(){
+            $("#allTopicList").dataTable();
+        });
+
+    </g:javascript>
+
+
 </head>
 
 <body>
@@ -28,19 +40,24 @@
 <div class="container">
     <div class="row">
         <div class="cool col-lg-5">
-            <div class="boxy1">Trending Topic
+            <div class="boxy1">Topic
             </div>
 
-            <div class="boxy2">
-                <g:if test="${topic}">
-                    <g:each in="${topic}">
+            <div class="allTopicList boxy2">
+                <g:if test="${allTopic}">
+                    <table id="allTopicList">
+                    <g:each in="${allTopic}">
+                        <tr>
+                            <td>
+
+                            </td>
+                        </tr>
                         <g:if test="${user.admin || (it.user == user)}">
                             <div class="nonEdit" style="font-size: 15px">
                                 <g:link controller="user" action="index" params="[userID: it.user.id]">
                                     <asset:image src="${it.user.photo}" class="img-circle img-thumbnail dp"
                                                  alt="Profile Picture"/></g:link>
                                 <div style="font-size:15px;">
-                                %{--<g:if test="${user.subscriptions.topic.contains(it)}">--}%
                                     <g:if test="${assessment.Subscription.findByUserAndTopic(user, it)}">
                                         <g:link controller="topic" action="index" params="[topicID: it.id]">
                                             <span style="font-weight: bolder;">${it.name}</span>&nbsp;&nbsp;</g:link>
@@ -117,7 +134,6 @@
                                         <button style="display: inline-block; float: right"
                                                 onclick="deleteTopic('${it.id}')"
                                                 class="btn btn-outline-dark fa fa-trash fa-lg"></button>&nbsp;
-                                    %{--<g:link controller="topic" action="delete2" class="fa fa-trash fa-lg" params="[topicID: it.id]"></g:link>&nbsp;--}%
                                         <button style="display: inline-block; float: right" data-toggle="modal"
                                                 data-target="#editTopic"
                                                 class="btn btn-outline-dark fa fa-file-text fa-lg"></button>&nbsp;
@@ -162,6 +178,9 @@
                             </div><br><hr>
                         </g:else>
                     </g:each>
+                    </td>
+                    </tr>
+                </table>
                 </g:if>
 
             </div>
@@ -170,91 +189,26 @@
         <div class="col-lg-1"></div>
 
         <div class="cool col-lg-6">
-            <div class="boxy1">Search for
-                <span>${searchKey}</span>
+            <div class="boxy1">Users
             </div>
 
-            <div class="searchBox boxy2">
-                <g:each in="${searchPost}">
+            <div class="boxy2 allUserList">
+                <g:each in="${allUser}">
                     <div>
-                        <asset:image src="${it.user.photo}" class="img-circle img-thumbnail dp" alt="Profile Picture"/>
-                        <div>
-                            <span style="font-weight:bolder; font-size: 15px;">${it.user.firstName} ${it.user.lastName}</span>
-                            <span class="un">@${it.user.username} 5min</span>
-                            <span style="float: right;"><g:link controller="topic" action="index"
-                                                                params="[topicID: it.topic.id]">${it.topic.name}</g:link></span>
-                        </div>
-
-                        <div>
-                            <p>${it.description}</p>
-                        </div>
-
-                        <div>
-                            <span style="float: left;">
-                                <a href="#" class="fa fa-facebook fa-2x"></a>
-                                <a href="#" class="fa fa-twitter fa-2x"></a>
-                                <a href="#" class="fa fa-google fa-2x"></a>
-                            </span>
-                            <span style="float: right;">
-                                <g:if test="${it.hasProperty('filePath')}"><g:link controller="resources"
-                                                                                   action="downloadDocument"
-                                                                                   id="${it.id}">Download</g:link>&nbsp;&nbsp;</g:if>
-                                <g:if test="${it.hasProperty('linkurl')}">
-                                    <g:link target="_blank" url="${it.linkurl}">View Full Site</g:link>&nbsp;&nbsp;
-                                </g:if>
-                                <g:link controller="resources" action="index"
-                                        params="[resourceID: it.id]">View Post</g:link>&nbsp;&nbsp;
-
-                            </span>
-                        </div>
+                    <g:link style="text-decoration: none;" action="index" controller="user"
+                            params="[userID: it.id]"><asset:image  src="${it.photo}"
+                                                                     class="img-circle img-thumbnail dp"
+                                                                     alt="Profile Picture"/>
+                        <div style="font-size:15px;">
+                            <span style="font-weight: bolder;">${it.firstName + " " + it.lastName}</span><br>
+                        <span class="un">@${it.username}</span><br>
+                        <span class="un">Subscriptions&nbsp;&nbsp;&nbsp;Topics</span><br>
+                        <span>${assessment.Subscription.countByUser(it)}</span>&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <span>${assessment.Topic.countByUser(it)}</span>
+                    </g:link>
 
                     </div><br><br><br><br><br><br><hr>
                 </g:each>
-            </div>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="cool col-lg-5">
-            <div class="boxy1">Recent Posts
-            </div>
-
-            <div class="boxy2">
-                <g:each in="${recent}">
-                    <div>
-                        <asset:image src="${it.user.photo}" class="img-circle img-thumbnail dp" alt="Profile Picture"/>
-                        <div>
-                            <span style="font-weight:bolder; font-size: 15px;">${it.user.firstName} ${it.user.lastName}</span>
-                            <span class="un">@${it.user.username} 5min</span>
-                            <span style="float: right;"><g:link controller="topic" action="index"
-                                                                params="[topicID: it.topic.id]">${it.topic.name}</g:link></span>
-                        </div>
-
-                        <div>
-                            <p>${it.description}</p>
-                        </div>
-
-                        <div>
-                            <span style="float: left;">
-                                <a href="#" class="fa fa-facebook fa-2x"></a>
-                                <a href="#" class="fa fa-twitter fa-2x"></a>
-                                <a href="#" class="fa fa-google fa-2x"></a>
-                            </span>
-                            <span style="float: right;">
-                                <g:if test="${it.hasProperty('filePath')}"><g:link controller="resources"
-                                                                                   action="downloadDocument"
-                                                                                   id="${it.id}">Download</g:link>&nbsp;&nbsp;</g:if>
-                                <g:if test="${it.hasProperty('linkurl')}">
-                                    <g:link target="_blank" url="${it.linkurl}">View Full Site</g:link>&nbsp;&nbsp;
-                                </g:if>
-                                <g:link controller="resources" action="index"
-                                        params="[resourceID: it.id]">View Post</g:link>&nbsp;&nbsp;
-                            </span>
-                        </div>
-
-                    </div><br><br><br><br><br><br><hr>
-                </g:each>
-
             </div>
         </div>
     </div>

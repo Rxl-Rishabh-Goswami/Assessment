@@ -3,7 +3,7 @@ package assessment
 import grails.testing.services.ServiceUnitTest
 import spock.lang.Specification
 
-class LoginServiceSpec extends Specification implements ServiceUnitTest<LoginService>{
+class ResourceServiceSpec extends Specification implements ServiceUnitTest<ResourceService>{
 
     def setup() {
     }

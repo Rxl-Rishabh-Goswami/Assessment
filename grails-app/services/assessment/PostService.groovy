@@ -1,6 +1,6 @@
 package assessment
 
-import com.sun.java.swing.plaf.windows.TMSchema
+
 import grails.gorm.transactions.Transactional
 
 @Transactional
@@ -39,11 +39,12 @@ class PostService {
         return topList
     }
     def trend(){
-
+        List publicTopic = Topic.findAllByVisibility(0)
         List trend = Resource.createCriteria().list(max: 5,offset: 0) {
             projections {
                 count("id", 'numResource')
             }
+            inList('topic',publicTopic)
             groupProperty("topic")
             order('numResource', 'desc')
         }

@@ -10,7 +10,7 @@ body{
   padding: 5px;
 }
 .boxy1{
-  background-color: #eee;
+  background-color: floralwhite;
   border-radius: 10px;
   font-size: large;
   font-weight: bold;
@@ -23,7 +23,7 @@ body{
 }
 .dp {
   float: left;
-  padding: 5px;
+  margin-right: 10px;
   width: 100px;
 }
 .un{
@@ -32,4 +32,39 @@ body{
 .heading {
 font-family: "Goudy Bookletter 1911", sans-serif;
 font-size: xx-large;
+}
+.recentPost {
+  height:750px;
+  overflow-y: scroll;
+}
+.allTopicList,.allUserList {
+  height:500px;
+  overflow-y: scroll;
+}
+.topPost {
+  height:300px;
+  overflow-y: scroll;
+}
+.inbox {
+  height:150px;
+  overflow-y: scroll;
+}
+#allSubscriptionTopics {
+  height:150px;
+  overflow-y: scroll;
+}
+.topicsAtEditUser {
+  height:200px;
+  overflow-y: scroll;
+}
+.topicsAtUserPage {
+  height:200px;
+  overflow-y: scroll;
+}.subscriptionsAtUserPage {
+  height:200px;
+  overflow-y: scroll;
+}
+.postOnUserPage {
+  height:150px;
+  overflow-y: scroll;
 }

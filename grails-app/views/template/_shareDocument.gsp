@@ -2,6 +2,7 @@
 <html>
 <head>
     <title></title>
+
 </head>
 <body>
 <div class="modal" id="shareDocument" tabindex="-1" role="dialog" aria-labelledby="shareDocument" aria-hidden="true">
@@ -17,7 +18,7 @@
                 <g:uploadForm controller="resources" action="createDocument">
                     <div class="form-group">
                     <label>Document</label>
-                    <input class="form-group" type="file" name="document">
+                    <input class="form-group" id="file" type="file" name="document" onchange="validateFileSize()">
                     </div>
                     <div class="form-group">
                     <label>Description</label>
@@ -36,5 +37,32 @@
         </div>
     </div>
 </div>
+
+
+
+
+
+<script>
+    validateFileSize = () => {
+        const fi = document.getElementById('file');
+        // Check if any file is selected.
+            for (let i = 0; i <= fi.files.length - 1; i++) {
+
+                const fsize = fi.files.item(i).size;
+                const file = Math.round((fsize / 1024));
+                // The size of the file.
+                if (file >= 128) {
+                    alert(
+                        "File too Big, please select a file less than 128KB");
+                }
+                else {return true}
+            }
+
+    }
+</script>
+
+
+
+
 </body>
 </html>/

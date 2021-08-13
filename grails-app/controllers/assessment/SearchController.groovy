@@ -1,41 +1,39 @@
 package assessment
 
+import assessment.dto.PostDto
+import grails.converters.JSON
+
 class SearchController {
-//    SearchService searchService
-PostService postService
+    SearchService searchService
+    PostService postService
 
-    def searchPage(){
+    def searchPage() {
         User user = User.findWhere(username: session.username)
-        List recent = postService.recent()
-        List trend = postService.trend()
+        if(user){
+            String searchKey = params.searchKey
+            List searchPost = searchService.searchPost(searchKey)
+            if (user) {
+                List recent = postService.recent()
+                List trend = postService.trend()
+                render(view: 'Search', model: [user: user, searchPost: searchPost, searchKey: searchKey, recent: recent, topic: trend])
+            } else {
+                render(view: 'Search2', model: [searchPost: searchPost, searchKey: searchKey])
+            }
+        }else{
+            redirect(url: 'http://localhost:9091/')
+        }
 
 
+    }
+    def searchAjax(){
         String searchKey = params.searchKey
-        String key = '%'+searchKey+'%'
+        List searchPost = searchService.searchPost(searchKey)
+        List<PostDto> topDetails = []
+        searchPost.each {
+            topDetails << new PostDto(firstName: it.user.firstName, lastName: it.user.lastName, username: it.user.username, photo: it.user.photo, description: it.description, name: it.topic.name)
+        }
 
-        List searchTopic = Topic.createCriteria().list(){
-            ilike('name',key)
-        }
-        List searchPost
-        if(searchTopic){
-             searchPost = Resource.createCriteria().list() {
-                or{
-                    ilike('description',key)
-                    inList('topic',searchTopic)
-                }
-            }
-        }
-        else {
-             searchPost = Resource.createCriteria().list() {
-                or{
-                    ilike('description',key)
-                    //inList('topic',searchTopic)
-                }
-            }
-        }
-        println searchTopic
-
-        render(view: 'Search',model: [user:user,searchPost:searchPost,searchKey: searchKey,recent:recent,topic:trend])
+            render(topDetails as JSON)
 
 
     }

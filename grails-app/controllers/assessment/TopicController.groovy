@@ -2,72 +2,81 @@ package assessment
 
 class TopicController {
     TopicService topicService
+    SubscribeService subscribeService
 
     def index() {
         User user = User.findWhere(username: session.username)
-        def topicID = params.topicID as Long
-        Topic topic = Topic.findWhere(id:topicID)
-        render(view: 'topic',model: [user:user,topic:topic])
+        if(user){
+            def topicID = params.topicID as Long
+            Topic topic = Topic.findWhere(id: topicID)
+            render(view: 'topic', model: [user: user, topic: topic])
+        }else{
+            redirect(url: 'http://localhost:9091/')
+        }
+
 
     }
-    def createTopic(){
+    def indexWithoutUser(){
+        def topicID = params.topicID as Long
+        Topic topic = Topic.findWhere(id: topicID)
+        render(view: 'topicWithoutUser', model: [topic: topic])
+    }
+
+    def createTopic() {
         User user = User.findWhere(username: session.username)
-        Topic topic = new Topic(name: params['topicName'],visibility: params['topicVisibility'])
-        user.addToTopics(topic)
-        topic.save(flush:true, failOnError:true)
-        Subscription sub = new Subscription(seriousness: 0)
-        user.addToSubscriptions(sub)
-        topic.addToSubscriptions(sub)
-        sub.save(flush:true,failOnError:true)
-        flash.createTopic = "Topic ${topic.name} Successfully Created !!!"
-        redirect(controller:'login', action: 'dashboard')
-    }
-    def allTopic(){
-        def allTopic = Topic.list()
-        User user = User.findWhere(username:session.username)
-        render(view:'adminTopic',model:[allTopic:allTopic, user:user])
-    }
-    def delete(){
-        def topicID = params.topicID as Long
-        Topic topic = Topic.get(topicID)
-        topic.delete(flush:true,failOnError:true)
-        redirect(controller:'topic', action: 'allTopic')
-    }
-    def delete2(){
-        def topicID = params.topicID as Long
-        Topic topic = Topic.get(topicID)
-        topic.delete(flush:true,failOnError:true)
-        redirect(controller:'login', action: 'dashboard')
+        Topic test = Topic.findByNameAndUser(params.topicName,user)
+        if(test){
+                flash.createTopic = "This topic Already Exist For ${user.firstName} ${user.lastName}"
+                redirect(controller: 'login',action: 'dashboard')
+
+            } else {
+                Topic topic = topicService.createTopic(params.topicName, params.topicVisibility, user)
+                subscribeService.addSubscriptions(user, topic)
+                flash.createTopic = "Topic ${topic.name} Successfully Created !!!"
+                redirect(controller: 'login', action: 'dashboard')
+        }
+
     }
 
-    def changeVisibility(){
+    def allTopic() {
+        def allTopic = Topic.list()
+        User user = User.findWhere(username: session.username)
+        render(view: 'adminTopic', model: [allTopic: allTopic, user: user])
+    }
+
+    def delete2() {
         def topicID = params.topicID as Long
         Topic topic = Topic.get(topicID)
-        topicService.changeVisibility(topic,params.Pri)
+        topic.delete(flush: true, failOnError: true)
+        redirect(controller: 'login', action: 'dashboard')
+    }
+
+    def changeVisibility() {
+        println params
+        def topicID = params.topicID as Long
+        Topic topic = Topic.get(topicID)
+        topicService.changeVisibility(topic, params.Pri)
         redirect(controller: 'login', action: 'dashboard')
 
     }
-    def editTopic(){
+    def changePrivacy() {
+        println params
+        def topicID = params.topicID as Long
+        Topic topic = Topic.get(topicID)
+        Enum Pri = topic.visibility.convert(params.Pri)
+        println Pri
+        topic.visibility = Pri
+        topic.save(flush:true,failOnError:true)
+        redirect(controller: 'login', action: 'dashboard')
+
+    }
+
+    def editTopic() {
         Long topicID = params.topicID as Long
         Topic topic = Topic.get(topicID)
-        println topic
-        topic.name = params.newName
-//        int value = params.topicVisibility as int
-//        Enum pri = topic.visibility.convert(value)
-//        topic.visibility = pri
-        topic.save(flush:true,saveOnError:true)
+        topicService.changeNameOfTopic(topic, params.newName)
         redirect(controller: 'login', action: 'dashboard')
 
-    }
-    def editTopicName(){
-        Topic topic = Topic.findByName(params.topicName)
-        String newName = params.newTopicName
-        topic.name = newName
-        println newName
-        println topic
-
-        topic.save(flush:true,failOnError:true)
-        redirect(controller:'login',action:'dashboard')
     }
 
 
