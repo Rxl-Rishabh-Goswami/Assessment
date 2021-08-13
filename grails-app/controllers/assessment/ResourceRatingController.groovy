@@ -1,18 +1,14 @@
 package assessment
 
 class ResourceRatingController {
+    ResourceRatingService resourceRatingService
 
-    def index() { }
-    def rating(){
+    def rating() {
         User user = User.findWhere(username: session.username)
         def resourceID = params.resourceID as Long
-        Resource resource = Resource.findWhere(id:resourceID)
-        ResourceRating rate = new ResourceRating()
-        def rateScore = params.r as int
-        rate.score = rateScore
-        user.addToResourceratings(rate)
-        resource.addToResourceratings(rate)
-        println rate.score
-        rate.save(flush:true,failOnError:true)
+        Resource resource = Resource.findWhere(id: resourceID)
+        int score = params.r as int
+        ResourceRating ratingAResource = resourceRatingService.rateResource(user, resource, score)
+        redirect(controller: 'resources', action: 'index', params: [resourceID: resourceID])
     }
 }

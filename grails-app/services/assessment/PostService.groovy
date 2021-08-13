@@ -1,5 +1,6 @@
 package assessment
 
+
 import grails.gorm.transactions.Transactional
 
 @Transactional
@@ -29,22 +30,40 @@ class PostService {
             order("average", "desc")
             groupProperty("resource")
         }
-        return top
+        def topList = new ArrayList()
+        for (int i = 0; i < top.size() ; i++) {
+            topList[i] = top[i][1]
+        }
+
+
+        return topList
     }
     def trend(){
-
-//        List trend = Resource.createCriteria().list(max: 5,offset: 0) {
-//            projections {
-//                count("id", 'numResource')
-//            }
-//            groupProperty("topic")
-//            order('numResource', 'desc')
-//        }
-        List trend = Topic.list()
-        trend.sort {
-            Topic topic -> -topic.resources.size()
+        List publicTopic = Topic.findAllByVisibility(0)
+        List trend = Resource.createCriteria().list(max: 5,offset: 0) {
+            projections {
+                count("id", 'numResource')
+            }
+            inList('topic',publicTopic)
+            groupProperty("topic")
+            order('numResource', 'desc')
         }
-        return trend
+
+        def trendList = new ArrayList()
+        for (int i=0;i<trend.size();i++){
+            trendList[i] = trend[i][1]
+        }
+        //List pub = Topic.findAllByVisibility(0)
+//        Topic test = Topic.get(23)
+//        Enum vis = test.visibility.convert(0)
+//        List trend = Topic.createCriteria().list(max:5,offset:0,sort:"topic.resources.size",order:"desc") {
+//            eq('visibility', vis)
+//        }
+        //List trend = Topic.list(max:5,offset:0)
+//        trend.sort {
+//            Topic topic -> -topic.resources.size()
+//        }
+        return trendList
     }
 
 }

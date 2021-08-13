@@ -1,76 +1,124 @@
 package assessment
 
+import grails.converters.JSON
+
 class UserController {
 
     def index() {
+        Long userID = params.userID as Long
+        User otherUser = User.get(userID)
         User user = User.findWhere(username: session.username)
-        render(view: 'userprofile',model: [user:user])
+        if(user){
+            render(view: 'userprofile', model: [user: user, og: otherUser])
+        }else{
+            redirect(url: 'http://localhost:9091/')
+        }
+
     }
-    def changeProfile(){
-        User user = User.findWhere(username:session.username)
-        render(view: 'editprofile',model: [user:user])
+
+
+    def changeProfile() {
+        User user = User.findWhere(username: session.username)
+        if(user){
+            render(view: 'editprofile', model: [user: user])
+        }else {
+            redirect(url: 'http://localhost:9091/')
+        }
+
     }
-    def editProfile(){
-        if(params.password==params.confirm){
-            User user = User.findWhere(username:session.username)
-            user.username = params.username
+
+    def editProfile() {
+        User user = User.findWhere(username: session.username)
+        if (params.username) {
+            User test = User.findWhere(username: params.username)
+            if (!test) {
+                println "if case"
+                user.username = params.username
+                flash.userUpdated = "User Details Successfully Updated"
+                session.username = params.username
+            } else {
+                println "else case"
+                flash.usernameTaken = "Username Already Taken Try Something Different"
+            }
+        }
+        if (params.firstName) {
+            println "firstName"
             user.firstName = params.firstName
+            flash.userUpdated = "User Details Successfully Updated"
+        }
+        if (params.lastName) {
+            println "lastName case"
             user.lastName = params.lastName
-            user.password = params.password
+            flash.userUpdated = "User Details Successfully Updated"
+        }
+        if (params.profilePhoto) {
+            println params.profilePhoto
             def profilePhoto = request.getFile("profilePhoto")
             String origin = profilePhoto.getOriginalFilename()
             if (origin) {
                 File file = new File("/home/rxlogix/IdeaProjects/Assessment/grails-app/assets/images/profilePicture/${params.username}.jpg")
                 profilePhoto.transferTo(file)
-                user.photo ="/profilePicture/${params.username}.jpg"
+                user.photo = "/profilePicture/${params.username}.jpg"
             }
-            if(params.profilePhoto==null){
-                user.photo="/profilePicture/unknown.jpg"
-            }
-            user.save(flush:true, failOnError:true)
             flash.userUpdated = "User Details Successfully Updated"
-            redirect(action: 'changeProfile')
-        }
-        else{
-            flash.userNotUpdated = "Errr...!!! Try Again"
-            redirect(action: 'changeProfile')
         }
 
+
+        try {
+            user.save(flush: true, failOnError: true)
+        } catch (e) {
+            flash.userNotUpdated = "Try Again User Details Not Updated"
+        }
+
+        redirect(action: 'changeProfile')
+
+
     }
-    def updatePassword(){
-        if(params.newpassword==params.confirmpassword){
-            User user = User.findWhere(username:session.username)
+
+    def updatePassword() {
+        if (params.newpassword == params.confirmpassword) {
+            User user = User.findWhere(username: session.username)
             user.password = params.newpassword
-            user.save(flush:true,failOnError:true)
+            user.save(flush: true, failOnError: true)
             flash.passwordUpdated = "Password Successfully Updated"
             redirect(action: 'changeProfile')
-        }
-        else{
+        } else {
             flash.passwordNotUpdated = "Errr...!!! Try Again"
-            redirect(action:'changeProfile')
+            redirect(action: 'changeProfile')
         }
 
     }
-    def adminUser(){
+
+    def adminUser() {
         User user = User.findWhere(username: session.username)
         def allUser = User.findAll()
-        render(view: 'adminuser',model: [allUser:allUser,user: user])
-
+        render(view: 'adminuser', model: [allUser: allUser, user: user])
     }
-    def deactivate(){
+
+
+    def deactivate() {
         def userID = params.userID as Long
         User testUser = User.get(userID)
         testUser.active = false
-        testUser.save(flush:true,failOnError:true)
-        redirect(controller:'user', action: 'adminUser')
+        testUser.save(flush: true, failOnError: true)
+        redirect(controller: 'user', action: 'adminUser')
 
     }
-    def activate(){
+
+    def activate() {
         def userID = params.userID as Long
         User testUser = User.get(userID)
         testUser.active = true
-        testUser.save(flush:true,failOnError:true)
-        redirect(controller:'user', action: 'adminUser')
+        testUser.save(flush: true, failOnError: true)
+        redirect(controller: 'user', action: 'adminUser')
+
+    }
+    def admin() {
+        def userID = params.userID as Long
+        User testUser = User.get(userID)
+        testUser.admin = !(testUser.admin)
+        testUser.save(flush: true, failOnError: true)
+        redirect(controller: 'user', action: 'adminUser')
 
     }
 }

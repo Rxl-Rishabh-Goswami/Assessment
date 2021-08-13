@@ -16,15 +16,16 @@
                 <g:form controller="topic" action="editTopic">
                     <div class="form-group">
                         <label>Name</label>
-                        <g:textField name="topicName" class="form-control"></g:textField>
+                        <g:textField required="true" name="newName" value="${topicName}" class="form-control"></g:textField>
                     </div>
-                    <div class="form-group">
-                        <label>Visbility</label>
-                        <select name="topicVisibility" class="form-control">
-                            <option name="0">Public</option>
-                            <option name="1">Private</option>
-                        </select>
-                    </div>
+                    %{--<div class="form-group">--}%
+                        %{--<label>Visbility</label>--}%
+                        %{--<select name="topicVisibility" class="form-control">--}%
+                            %{--<option name="0">Public</option>--}%
+                            %{--<option name="1">Private</option>--}%
+                        %{--</select>--}%
+                    %{--</div>--}%
+                    <g:hiddenField name="topicID" value="${topicID}"></g:hiddenField>
                     <div class="modal-footer">
                         <g:submitButton name="submit" class="btn btn-primary" value="Submit"/>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

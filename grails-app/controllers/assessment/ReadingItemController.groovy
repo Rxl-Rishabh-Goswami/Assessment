@@ -1,19 +1,14 @@
 package assessment
 
 class ReadingItemController {
+    ReadingItemService readingItemService
 
-    def index() { }
-    def isRead(){
+    def isRead() {
         User user = User.findWhere(username: session.username)
         def resourceID = params.resourceID as long
-        Resource resource = Resource.findWhere(id:resourceID)
-//        ReadingItem ri = new ReadingItem()
-        ReadingItem ri = ReadingItem.findByUserAndResource(user,resource)
-        ri.isRead = true
-        user.addToReadingitems(ri)
-        resource.addToReadingitems(ri)
-        ri.save(flush:true,failOnError:true)
-        redirect(controller:'login', action:'dashboard')
+        Resource resource = Resource.findWhere(id: resourceID)
+        ReadingItem readingItem = readingItemService.itemRead(user, resource)
+        redirect(controller: 'login', action: 'dashboard')
     }
 
 }

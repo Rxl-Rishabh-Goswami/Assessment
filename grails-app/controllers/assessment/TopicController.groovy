@@ -1,56 +1,82 @@
 package assessment
 
 class TopicController {
+    TopicService topicService
+    SubscribeService subscribeService
 
     def index() {
         User user = User.findWhere(username: session.username)
-        def topicID = params.topicID as Long
-        Topic topic = Topic.findWhere(id:topicID)
-        render(view: 'topic',model: [user:user,topic:topic])
+        if(user){
+            def topicID = params.topicID as Long
+            Topic topic = Topic.findWhere(id: topicID)
+            render(view: 'topic', model: [user: user, topic: topic])
+        }else{
+            redirect(url: 'http://localhost:9091/')
+        }
+
 
     }
-    def createTopic(){
-        User user = User.findWhere(username: session.username)
-        Topic topic = new Topic(name: params['topicName'],visibility: params['topicVisibility'])
-        user.addToTopics(topic)
-        topic.save(flush:true, failOnError:true)
-        Subscription sub = new Subscription(seriousness: 0)
-        user.addToSubscriptions(sub)
-        topic.addToSubscriptions(sub)
-        sub.save(flush:true,failOnError:true)
-        flash.createTopic = "Topic ${topic.name} Successfully Created !!!"
-        redirect(controller:'login', action: 'dashboard')
+    def indexWithoutUser(){
+        def topicID = params.topicID as Long
+        Topic topic = Topic.findWhere(id: topicID)
+        render(view: 'topicWithoutUser', model: [topic: topic])
     }
-    def inviteTopic(){
-        def topic = params.topicInvite
-        def send = params.emailInvite
-        sendMail{
-            to send
-            subject 'Subscribe: '
-            body 'Subscribe This Interesting Topic'
+
+    def createTopic() {
+        User user = User.findWhere(username: session.username)
+        Topic test = Topic.findByNameAndUser(params.topicName,user)
+        if(test){
+                flash.createTopic = "This topic Already Exist For ${user.firstName} ${user.lastName}"
+                redirect(controller: 'login',action: 'dashboard')
+
+            } else {
+                Topic topic = topicService.createTopic(params.topicName, params.topicVisibility, user)
+                subscribeService.addSubscriptions(user, topic)
+                flash.createTopic = "Topic ${topic.name} Successfully Created !!!"
+                redirect(controller: 'login', action: 'dashboard')
         }
-        flash.inviteSent = "Invite Sent to ${params.emailInvite} for topic ${params.topicInvite}!!"
+
+    }
+
+    def allTopic() {
+        def allTopic = Topic.list()
+        User user = User.findWhere(username: session.username)
+        render(view: 'adminTopic', model: [allTopic: allTopic, user: user])
+    }
+
+    def delete2() {
+        def topicID = params.topicID as Long
+        Topic topic = Topic.get(topicID)
+        topic.delete(flush: true, failOnError: true)
         redirect(controller: 'login', action: 'dashboard')
     }
-    def allTopic(){
-        def allTopic = Topic.list()
-        User user = User.findWhere(username:session.username)
-        render(view:'adminTopic',model:[allTopic:allTopic, user:user])
-    }
-    def delete(){
+
+    def changeVisibility() {
+        println params
         def topicID = params.topicID as Long
         Topic topic = Topic.get(topicID)
-        topic.delete(flush:true,failOnError:true)
-        redirect(controller:'topic', action: 'allTopic')
+        topicService.changeVisibility(topic, params.Pri)
+        redirect(controller: 'login', action: 'dashboard')
+
     }
-    def delete2(){
+    def changePrivacy() {
+        println params
         def topicID = params.topicID as Long
         Topic topic = Topic.get(topicID)
-        topic.delete(flush:true,failOnError:true)
-        redirect(controller:'login', action: 'dashboard')
+        Enum Pri = topic.visibility.convert(params.Pri)
+        println Pri
+        topic.visibility = Pri
+        topic.save(flush:true,failOnError:true)
+        redirect(controller: 'login', action: 'dashboard')
+
     }
-    def editTopic(){
-        Topic topic = Topic.findWhere
+
+    def editTopic() {
+        Long topicID = params.topicID as Long
+        Topic topic = Topic.get(topicID)
+        topicService.changeNameOfTopic(topic, params.newName)
+        redirect(controller: 'login', action: 'dashboard')
+
     }
 
 
